@@ -1,406 +1,463 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import matplotlib.gridspec as gridspec
+import matplotlib.ticker as ticker
 import numpy as np
 
-# ── Style ──────────────────────────────────────────────────────────────────
-plt.rcParams.update({
-    "font.family": "sans-serif",
-    "font.size": 10,
-    "axes.spines.top": False,
-    "axes.spines.right": False,
-    "axes.titlesize": 11,
-    "axes.titleweight": "bold",
-    "figure.facecolor": "#FAFAFA",
-    "axes.facecolor": "#FAFAFA",
-})
-COLORS = {
-    "anthropic": "#C25B2D",
-    "openai":    "#10A37F",
-    "google":    "#4285F4",
-    "microsoft": "#0078D4",
-    "aws":       "#FF9900",
-    "cohere":    "#8B5CF6",
-    "meta":      "#1877F2",
-    "neutral":   "#94A3B8",
-    "warn":      "#F59E0B",
-    "ok":        "#22C55E",
-}
+# ── Claude Brand Colors ────────────────────────────────────────────────────
+BG       = "#faf9f5"   # cream canvas
+BG_MID   = "#eeece2"   # section fill
+BORDER   = "#e8e6dc"
+TEXT     = "#3d3929"   # warm dark brown
+MUTED    = "#7c7a6e"
+SUBTLE   = "#b0aea5"
+ORANGE   = "#d97757"   # terra cotta
+ORANGE_D = "#bd5d3a"
+BLUE     = "#6a9bcc"
+GREEN    = "#788c5d"
+
+# competitor colors
+C_OPENAI = "#10A37F"
+C_GOOGLE = "#4285F4"
+C_MSFT   = "#0078D4"
+C_AWS    = "#FF9900"
+C_COHERE = "#8B5CF6"
+C_META   = "#1877F2"
 
 OUT = "/Users/gztd-03-02619/Q2/the_future/"
 
+plt.rcParams.update({
+    "font.family":       "sans-serif",
+    "font.size":         12,
+    "axes.titlesize":    14,
+    "axes.titleweight":  "bold",
+    "axes.titlepad":     16,
+    "axes.labelsize":    11,
+    "axes.labelcolor":   MUTED,
+    "axes.spines.top":   False,
+    "axes.spines.right": False,
+    "axes.spines.left":  True,
+    "axes.spines.bottom":True,
+    "axes.edgecolor":    BORDER,
+    "xtick.color":       MUTED,
+    "ytick.color":       MUTED,
+    "xtick.labelsize":   10,
+    "ytick.labelsize":   10,
+    "figure.facecolor":  BG,
+    "axes.facecolor":    BG,
+    "grid.color":        BORDER,
+    "grid.linewidth":    0.8,
+})
+
+def save(name):
+    plt.savefig(OUT + name, dpi=160, bbox_inches="tight",
+                facecolor=BG, edgecolor="none")
+    plt.close()
+    print(f"  {name}")
+
 # ══════════════════════════════════════════════════════════════════════════════
-# Chart 1 — ARR Comparison (with dispute annotation)
+# Chart 1 — ARR Comparison
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(7, 3.5))
-companies = ["Anthropic\n(gross-reported)", "OpenAI", "Anthropic\n(disputed net)"]
-arr = [30, 25, 22]
-clrs = [COLORS["anthropic"], COLORS["openai"], COLORS["anthropic"]]
-alphas = [1.0, 1.0, 0.45]
-bars = []
-for comp, val, clr, al in zip(companies, arr, clrs, alphas):
-    b = ax.barh(comp, val, color=clr, alpha=al, height=0.5)
-    bars.append(b[0])
-ax.set_xlabel("ARR ($B, April 2026)")
-ax.set_title("ARR Comparison: Anthropic vs OpenAI")
-for bar, val in zip(bars, arr):
-    ax.text(val + 0.3, bar.get_y() + bar.get_height()/2,
-            f"${val}B", va="center", fontweight="bold")
-ax.axvline(22, color=COLORS["anthropic"], ls="--", alpha=0.4, lw=1)
-ax.set_xlim(0, 36)
-note = mpatches.Patch(color=COLORS["anthropic"], alpha=0.45, label="~$8B dispute (gross vs. net on AWS/GCP deals)")
-ax.legend(handles=[note], fontsize=8, loc="lower right")
-ax.set_facecolor("#FAFAFA")
-caption = "Anthropic leads on gross-reported ARR; OpenAI disputes ~$8B via revenue recognition.\nUnderlying growth trajectory (70× API YoY) is not in dispute."
-fig.text(0.5, -0.04, caption, ha="center", fontsize=8, color="#64748B")
-plt.tight_layout()
-plt.savefig(OUT + "chart1_arr_comparison.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 1 done")
+fig, ax = plt.subplots(figsize=(8, 4.5))
+fig.subplots_adjust(left=0.32, right=0.88, top=0.82, bottom=0.14)
+
+companies = ["Anthropic (gross)", "OpenAI", "Anthropic (disputed net)"]
+arr       = [30, 25, 22]
+clrs      = [ORANGE, C_OPENAI, ORANGE]
+alphas    = [1.0, 1.0, 0.38]
+
+for i, (comp, val, clr, al) in enumerate(zip(companies, arr, clrs, alphas)):
+    ax.barh(i, val, color=clr, alpha=al, height=0.52, zorder=2)
+    ax.text(val + 0.6, i, f"${val}B", va="center", ha="left",
+            fontsize=13, fontweight="bold", color=TEXT)
+
+ax.set_yticks(range(len(companies)))
+ax.set_yticklabels(companies, fontsize=11)
+ax.set_xlim(0, 38)
+ax.set_xlabel("ARR  ($B,  April 2026)", labelpad=8)
+ax.set_title("ARR Comparison: Anthropic vs OpenAI", color=TEXT)
+ax.axvline(22, color=ORANGE, ls="--", alpha=0.45, lw=1.4)
+
+note = mpatches.Patch(color=ORANGE, alpha=0.38,
+                      label="~$8B dispute: gross vs. net revenue recognition on AWS/GCP deals")
+ax.legend(handles=[note], fontsize=9, loc="lower right",
+          framealpha=0, labelcolor=MUTED)
+ax.yaxis.set_tick_params(length=0)
+ax.set_facecolor(BG)
+save("chart1_arr_comparison.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Chart 2 — Developer Community Scale
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(8, 4))
-labels = ["OpenAI", "Google\nGemini", "GitHub\n(MSFT)", "AWS\nBedrock", "Cohere\n(enterprise)", "Anthropic\n(self-serve)"]
-devs = [4_000_000, 2_400_000, 145_000_000, 100_000, 17_000, None]
-bar_clrs = [COLORS["openai"], COLORS["google"], COLORS["microsoft"], COLORS["aws"], COLORS["cohere"], COLORS["anthropic"]]
-# GitHub is so large it distorts; normalize to log-scale intuition, show separately
-main_labels = ["OpenAI", "Google\nGemini", "AWS\nBedrock", "Cohere\n(enterprise)"]
-main_devs   = [4_000_000, 2_400_000, 100_000, 17_000]
-main_clrs   = [COLORS["openai"], COLORS["google"], COLORS["aws"], COLORS["cohere"]]
+fig, ax = plt.subplots(figsize=(9, 5))
+fig.subplots_adjust(left=0.1, right=0.95, top=0.82, bottom=0.22)
 
-bars = ax.bar(main_labels, main_devs, color=main_clrs, width=0.55)
-for bar, val in zip(bars, main_devs):
-    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 40_000,
-            f"{val/1_000_000:.1f}M" if val >= 1_000_000 else f"{val:,}",
-            ha="center", fontsize=9, fontweight="bold")
+labels = ["OpenAI", "Google\nGemini", "AWS\nBedrock", "Cohere\n(enterprise)"]
+devs   = [4_000_000, 2_400_000, 100_000, 17_000]
+clrs   = [C_OPENAI, C_GOOGLE, C_AWS, C_COHERE]
 
+bars = ax.bar(labels, devs, color=clrs, width=0.52, zorder=2)
 ax.set_ylabel("Active Developers / Organizations")
-ax.set_title("API Developer Community Scale (May 2026)\n[GitHub/145M excluded — different measure]")
-ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x/1_000_000:.1f}M" if x >= 1_000_000 else f"{int(x/1000)}K"))
-ax.text(0, -380_000, "Anthropic: community size not publicly disclosed; 70× API volume YoY signals intensity, not breadth.",
-        fontsize=8, color="#64748B")
-plt.tight_layout()
-plt.savefig(OUT + "chart2_developer_scale.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 2 done")
+ax.set_title("API Developer Community Scale  (May 2026)", color=TEXT)
+ax.yaxis.set_major_formatter(
+    ticker.FuncFormatter(lambda x, _: f"{x/1e6:.1f}M" if x >= 1e6 else f"{int(x/1000)}K"))
+ax.set_ylim(0, 4_800_000)
+ax.yaxis.grid(True, zorder=0)
+ax.set_axisbelow(True)
+
+for bar, val in zip(bars, devs):
+    label = f"{val/1e6:.1f}M" if val >= 1e6 else f"{val:,}"
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 60_000,
+            label, ha="center", va="bottom", fontsize=12, fontweight="bold", color=TEXT)
+
+ax.text(0.5, -0.18,
+        "Anthropic developer community not publicly disclosed.\n"
+        "70× API volume YoY signals intensity per developer — not breadth vs. competitors.",
+        ha="center", transform=ax.transAxes, fontsize=9, color=MUTED, linespacing=1.6)
+save("chart2_developer_scale.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Chart 3 — RICE Priority: Channels & Experiments
+# Chart 3 — RICE: Channels (left) + Experiments (right)
 # ══════════════════════════════════════════════════════════════════════════════
-fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+fig, axes = plt.subplots(1, 2, figsize=(13, 6))
+fig.subplots_adjust(left=0.07, right=0.97, top=0.80, bottom=0.22, wspace=0.35)
 
-# 3a: Channels
-ch_labels = ["Docs /\nRunnable Samples", "Claude Code\n→ API On-ramp", "Bedrock\nIncrementality", "Developer\nCommunity"]
+# 3a channels
+ch_labels = ["Docs /\nRunnable\nSamples", "Claude Code\n→ API\nOn-ramp", "Bedrock\nIncrement-\nality", "Developer\nCommunity"]
 ch_scores = [52_500, 16_250, 0, 625]
-ch_reco   = ["Scale", "Scale", "Research", "Build (6–12mo)"]
-ch_clrs   = [COLORS["ok"], COLORS["anthropic"], COLORS["warn"], COLORS["neutral"]]
-b = axes[0].bar(ch_labels, ch_scores, color=ch_clrs, width=0.55)
-axes[0].set_title("Acquisition Channels — RICE Score")
-axes[0].set_ylabel("RICE Score")
-for bar, score, rec in zip(b, ch_scores, ch_reco):
-    if score > 0:
-        axes[0].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 500,
-                     f"{score:,}\n({rec})", ha="center", fontsize=8.5, fontweight="bold")
+ch_notes  = ["Scale #1", "Scale #2", "Research", "Build 6–12mo"]
+ch_clrs   = [GREEN, ORANGE, SUBTLE, BLUE]
+
+ax = axes[0]
+bars = ax.bar(ch_labels, ch_scores, color=ch_clrs, width=0.52, zorder=2)
+ax.set_title("Acquisition Channels\nRICE Score", color=TEXT)
+ax.set_ylabel("RICE Score")
+ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+ax.set_ylim(0, 62_000)
+for bar, score, note in zip(bars, ch_scores, ch_notes):
+    if score > 500:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 800,
+                f"{score:,}", ha="center", va="bottom", fontsize=11, fontweight="bold", color=TEXT)
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 3_500,
+                note, ha="center", va="bottom", fontsize=9, color=MUTED)
     else:
-        axes[0].text(bar.get_x() + bar.get_width()/2, 800, "(Research)", ha="center", fontsize=8, color="#64748B")
+        ax.text(bar.get_x() + bar.get_width()/2, 1_200,
+                note, ha="center", va="bottom", fontsize=9, color=MUTED)
 
-# 3b: Experiments
-exp_labels = ["E1: In-console\nQuickstart", "E2: Contextual\nUpgrade CTA", "E3: Claude Code\n→ API Path"]
+# 3b experiments
+exp_labels = ["E1: In-console\nQuickstart", "E2: Upgrade\nCTA at Limits", "E3: Claude Code\n→ API Path"]
 exp_scores = [52_500, 14_625, 15_000]
-exp_notes  = ["#1 Priority\n(2 weeks)", "#2 Priority\n(2 weeks)", "#3 Priority\n(validate first)"]
-exp_clrs   = [COLORS["ok"], COLORS["anthropic"], COLORS["warn"]]
-b2 = axes[1].bar(exp_labels, exp_scores, color=exp_clrs, width=0.55)
-axes[1].set_title("Days 31–60 Experiments — RICE Score")
-for bar, score, note in zip(b2, exp_scores, exp_notes):
-    axes[1].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 400,
-                 f"{score:,}\n{note}", ha="center", fontsize=8.5, fontweight="bold")
+exp_notes  = ["#1 · 2 weeks", "#2 · 2 weeks", "#3 · validate\nassumption first"]
+exp_clrs   = [GREEN, ORANGE, BLUE]
 
-fig.text(0.5, -0.04, "RICE = (Reach × Impact × Confidence) / Effort (person-weeks). E3 requires assumption validation before build.",
-         ha="center", fontsize=8, color="#64748B")
-plt.tight_layout()
-plt.savefig(OUT + "chart3_rice_scores.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 3 done")
+ax = axes[1]
+bars = ax.bar(exp_labels, exp_scores, color=exp_clrs, width=0.52, zorder=2)
+ax.set_title("Days 31–60 Experiments\nRICE Score", color=TEXT)
+ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+ax.set_ylim(0, 62_000)
+for bar, score, note in zip(bars, exp_scores, exp_notes):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 800,
+            f"{score:,}", ha="center", va="bottom", fontsize=11, fontweight="bold", color=TEXT)
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 4_000,
+            note, ha="center", va="bottom", fontsize=9, color=MUTED)
+
+fig.text(0.5, 0.04,
+         "RICE = (Reach × Impact × Confidence) / Effort (person-weeks)  ·  E3 requires Week 1 assumption validation before any build decision",
+         ha="center", fontsize=9, color=MUTED)
+save("chart3_rice_scores.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Chart 4 — OST Recommended POC Scores
+# Chart 4 — OST POC Scores
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(7, 4))
-pocs = ["A1: In-console\nInteractive Quickstart", "B1: Contextual\nUpgrade Modal", "C1: Claude Code\n→ API On-ramp"]
+fig, ax = plt.subplots(figsize=(9, 5.5))
+fig.subplots_adjust(left=0.1, right=0.95, top=0.80, bottom=0.28)
+
+pocs        = ["A1: In-console\nInteractive Quickstart", "B1: Contextual\nUpgrade Modal", "C1: Claude Code\n→ API On-ramp"]
 feasibility = [4, 4, 3]
 impact      = [4, 5, 3]
 market_fit  = [5, 5, 4]
 totals      = [f+i+m for f, i, m in zip(feasibility, impact, market_fit)]
 
 x = np.arange(len(pocs))
-w = 0.22
-b1 = ax.bar(x - w, feasibility, w, label="Feasibility (1–5)", color=COLORS["ok"])
-b2 = ax.bar(x,     impact,      w, label="Impact (1–5)",      color=COLORS["anthropic"])
-b3 = ax.bar(x + w, market_fit,  w, label="Market Fit (1–5)",  color=COLORS["google"])
-
-for xi, total in zip(x, totals):
-    ax.text(xi, 5.5, f"Total: {total}/15", ha="center", fontweight="bold", fontsize=9,
-            color="#1E293B")
+w = 0.24
+ax.bar(x - w, feasibility, w, label="Feasibility", color=GREEN,   zorder=2)
+ax.bar(x,     impact,      w, label="Impact",      color=ORANGE,  zorder=2)
+ax.bar(x + w, market_fit,  w, label="Market Fit",  color=BLUE,    zorder=2)
 
 ax.set_xticks(x)
-ax.set_xticklabels(pocs)
-ax.set_ylim(0, 6.5)
-ax.set_ylabel("Score (1–5)")
-ax.set_title("OST Recommended POCs — Scoring")
-ax.legend(loc="upper right", fontsize=8)
-note = "C1 requires validating assumption first: what % of Claude Code users are already API users?\nIf >80% already converted → redirect effort to expansion, not conversion."
-ax.text(0.5, -0.18, note, ha="center", transform=ax.transAxes, fontsize=8, color="#64748B")
-plt.tight_layout()
-plt.savefig(OUT + "chart4_ost_scores.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 4 done")
+ax.set_xticklabels(pocs, fontsize=10)
+ax.set_ylim(0, 7.4)
+ax.set_ylabel("Score  (1 – 5)")
+ax.set_title("OST Recommended POCs — Feasibility · Impact · Market Fit", color=TEXT)
+ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+ax.legend(fontsize=10, framealpha=0, loc="upper right")
+
+for xi, total in zip(x, totals):
+    ax.text(xi, 6.15, f"Total: {total}/15",
+            ha="center", fontsize=11, fontweight="bold", color=TEXT,
+            bbox=dict(boxstyle="round,pad=0.3", facecolor=BG_MID, edgecolor=BORDER, lw=1))
+
+fig.text(0.5, 0.06,
+         "C1 requires assumption validation first: what % of Claude Code subscribers are already direct API users?\n"
+         "If >80% already converted → redirect effort to expansion.  If <40% → build C1.",
+         ha="center", fontsize=9, color=MUTED, linespacing=1.6)
+save("chart4_ost_scores.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Chart 5 — Competitor Positioning Matrix (Price vs Safety)
+# Chart 5 — Competitor Positioning Matrix
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(7.5, 5.5))
-# x = relative price (lower = cheaper), y = safety architecture depth
-# normalized 1-10 scales (qualitative)
+fig, ax = plt.subplots(figsize=(9, 6.5))
+fig.subplots_adjust(left=0.13, right=0.95, top=0.88, bottom=0.14)
+
 comp_data = {
-    "Meta Llama\n(free/OSS)":  (1, 3,  COLORS["meta"],      300),
-    "Google\nGemini":          (2, 4,  COLORS["google"],     350),
-    "AWS\nBedrock":            (4, 5,  COLORS["aws"],        300),
-    "Microsoft\nAzure AI":     (5, 6,  COLORS["microsoft"],  300),
-    "OpenAI\nAPI":             (7, 5,  COLORS["openai"],     300),
-    "Cohere":                  (6, 7,  COLORS["cohere"],     200),
-    "Anthropic\nClaude":       (6, 9,  COLORS["anthropic"],  400),
+    "Meta Llama\n(free / OSS)": (1.2, 3.0, C_META,   280, "right"),
+    "Google Gemini":             (2.2, 4.2, C_GOOGLE, 320, "right"),
+    "AWS Bedrock":               (4.0, 5.0, C_AWS,    280, "right"),
+    "Microsoft\nAzure AI":       (5.2, 6.2, C_MSFT,   280, "right"),
+    "OpenAI API":                (7.0, 5.2, C_OPENAI, 280, "left"),
+    "Cohere":                    (6.2, 7.2, C_COHERE, 220, "right"),
+    "Anthropic Claude":          (6.5, 9.2, ORANGE,   420, "left"),
 }
-for label, (px, py, clr, sz) in comp_data.items():
-    ax.scatter(px, py, s=sz, color=clr, alpha=0.85, zorder=3, edgecolors="white", linewidths=1.5)
-    offset_x = 0.15 if label != "OpenAI\nAPI" else -1.1
-    offset_y = 0.25 if label not in ("AWS\nBedrock", "Cohere") else -0.5
-    ax.text(px + offset_x, py + offset_y, label, fontsize=8.5, va="center", color="#1E293B")
+for label, (px, py, clr, sz, side) in comp_data.items():
+    ax.scatter(px, py, s=sz, color=clr, alpha=0.88, zorder=4,
+               edgecolors="white", linewidths=2)
+    ox = 0.22 if side == "right" else -0.22
+    ha = "left" if side == "right" else "right"
+    ax.text(px + ox, py, label, fontsize=9.5, va="center", ha=ha,
+            color=TEXT, zorder=5,
+            bbox=dict(boxstyle="round,pad=0.18", facecolor=BG, edgecolor="none", alpha=0.85))
 
-ax.set_xlim(0, 11)
-ax.set_ylim(0, 11)
-ax.set_xlabel("← Cheaper        Relative Price Tier        More Expensive →", labelpad=8)
-ax.set_ylabel("← Marketing claim        Safety Architecture Depth        Verifiable →", labelpad=8)
-ax.set_title("Competitor Positioning: Price vs. Safety Architecture Depth")
-ax.axhline(7, ls="--", color="#94A3B8", alpha=0.5, lw=1)
-ax.axvline(5, ls="--", color="#94A3B8", alpha=0.5, lw=1)
-ax.text(0.5, 7.2, "Regulated-industry threshold", fontsize=7.5, color="#94A3B8")
-ax.text(1, 0.5, "Open-source floor\n(Meta sets pricing ceiling for\ncommodity segment)", fontsize=7.5, color="#64748B")
-ax.text(6.5, 9.5, "← Anthropic's\ntarget zone", fontsize=8, color=COLORS["anthropic"], fontweight="bold")
-plt.tight_layout()
-plt.savefig(OUT + "chart5_competitor_matrix.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 5 done")
+ax.set_xlim(0, 11); ax.set_ylim(0, 11)
+ax.set_xlabel("← Cheaper   ·   Relative Price Tier   ·   More Expensive →", labelpad=10)
+ax.set_ylabel("← Marketing claim   ·   Safety Architecture   ·   Verifiable →", labelpad=10)
+ax.set_title("Competitor Positioning: Price vs. Safety Architecture Depth", color=TEXT)
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Chart 6 — Business Health Scorecard
-# ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(8, 3.5))
-ax.axis("off")
-dims   = ["Growth & Retention", "Unit Economics", "Capital Efficiency", "Strategic Position"]
-status = ["[OK] EXCEPTIONAL\n70x API YoY; $1M+ accts 12->500+",
-          "[!] MUST BASELINE\nCAC/LTV not instrumented for self-serve",
-          "[!] WATCH\n$380B valuation; revenue dispute adds noise",
-          "[OK] STRONG (gaps exist)\nMCP moat, Conway; community breadth lags"]
-colors_row = [COLORS["ok"], COLORS["warn"], COLORS["warn"], COLORS["ok"]]
+ax.axhline(7, ls="--", color=SUBTLE, lw=1.2, alpha=0.7)
+ax.axvline(5, ls="--", color=SUBTLE, lw=1.2, alpha=0.7)
+ax.text(0.3, 7.25, "Regulated-industry threshold", fontsize=9, color=SUBTLE)
+ax.fill_between([5, 11], [7, 7], [11, 11], color=ORANGE, alpha=0.05, zorder=0)
+ax.text(8.5, 10.3, "Target zone", fontsize=9, color=ORANGE_D, fontweight="bold")
 
-table_data = [[d, s] for d, s in zip(dims, status)]
-col_labels = ["Dimension", "API Platform Status"]
-tbl = ax.table(cellText=table_data, colLabels=col_labels,
-               loc="center", cellLoc="left")
-tbl.auto_set_font_size(False)
-tbl.set_fontsize(9)
-tbl.scale(1, 2.6)
-for (row, col), cell in tbl.get_celld().items():
-    cell.set_edgecolor("#E2E8F0")
-    if row == 0:
-        cell.set_facecolor("#1E293B")
-        cell.get_text().set_color("white")
-        cell.get_text().set_fontweight("bold")
-    elif col == 1 and row > 0:
-        cell.set_facecolor(colors_row[row-1] + "22")
-    else:
-        cell.set_facecolor("#FAFAFA")
-ax.set_title("Business Health Scorecard — Claude Platform API", fontweight="bold", pad=12, y=0.98)
-fig.text(0.5, 0.01, "Overall verdict: Strong Growth, Underbuilt Self-Serve. Fix the funnel — the economics are already good.",
-         ha="center", fontsize=8, color="#64748B")
-plt.tight_layout()
-plt.savefig(OUT + "chart6_health_scorecard.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 6 done")
+ax.set_facecolor(BG)
+save("chart5_competitor_matrix.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Chart 7 — Risk Matrix (Likelihood × Impact)
+# Chart 6 — Business Health Scorecard (horizontal bars)
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(8, 6))
-# (likelihood 1=Low 2=Med 3=High, impact 1=Low 2=Med 3=High)
+fig, ax = plt.subplots(figsize=(10, 4.8))
+fig.subplots_adjust(left=0.26, right=0.97, top=0.85, bottom=0.08)
+
+dims    = ["Growth &\nRetention", "Unit\nEconomics", "Capital\nEfficiency", "Strategic\nPosition"]
+scores  = [5, 3, 3, 4]          # out of 5
+clrs    = [GREEN, ORANGE, ORANGE, GREEN]
+labels  = [
+    "EXCEPTIONAL — 70× API YoY; $1M+ accounts 12 → 500+",
+    "MUST BASELINE — CAC/LTV not yet instrumented for self-serve",
+    "WATCH — Revenue dispute adds noise; strong underlying trajectory",
+    "STRONG (gaps) — MCP moat, Conway; developer community breadth lags",
+]
+
+y = np.arange(len(dims))
+ax.barh(y, scores, color=clrs, height=0.52, alpha=0.85, zorder=2)
+ax.set_yticks(y)
+ax.set_yticklabels(dims, fontsize=11)
+ax.set_xlim(0, 7.2)
+ax.set_xlabel("Score  (out of 5)")
+ax.set_title("Business Health Scorecard — Claude Platform API", color=TEXT)
+ax.xaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+ax.yaxis.set_tick_params(length=0)
+
+for i, (score, lbl) in enumerate(zip(scores, labels)):
+    ax.text(score + 0.12, i, lbl, va="center", ha="left",
+            fontsize=9, color=MUTED)
+
+ax.text(0.5, -0.08,
+        "Overall verdict: Strong Growth, Underbuilt Self-Serve.  Fix the funnel — the economics are already good.",
+        ha="center", transform=ax.transAxes, fontsize=10, color=TEXT, fontweight="bold")
+save("chart6_health_scorecard.png")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Chart 7 — Risk Matrix
+# ══════════════════════════════════════════════════════════════════════════════
+fig, ax = plt.subplots(figsize=(9.5, 7))
+fig.subplots_adjust(left=0.12, right=0.97, top=0.88, bottom=0.1)
+
 risks = [
-    ("Model releases\ninvalidate experiments",     3, 2),
-    ("Eng capacity\nconsumed by infra",            3, 3),
-    ("Meta Llama free tier\npulls cost-sensitive", 3, 3),
-    ("Google $2/M pricing\npressure",              2, 3),
-    ("Revenue accounting\nmetric noise",           1, 2),
-    ("Claude Code→API\nassumption invalid",        2, 2),
-    ("Bedrock channel\nconflict",                  2, 2),
-    ("Enterprise expansion\nblocked by procurement", 2, 3),
+    ("Model releases\ninvalidate experiments",       3, 2, ORANGE),
+    ("Eng capacity consumed\nby model infra",         3, 3, ORANGE_D),
+    ("Meta Llama free tier\npulls cost-sensitive",    3, 3, ORANGE_D),
+    ("Google $2/M pricing\npressure",                 2, 3, ORANGE),
+    ("Revenue accounting\nmetric noise",              1, 2, BLUE),
+    ("Claude Code→API\nassumption invalid",           2, 2, BLUE),
+    ("Bedrock channel\nconflict",                     2, 2, BLUE),
+    ("Enterprise expansion\nblocked by procurement",  2, 3, ORANGE),
 ]
-jitter = np.random.default_rng(42)
-for label, lkh, imp in risks:
-    jx = lkh + jitter.uniform(-0.12, 0.12)
-    jy = imp  + jitter.uniform(-0.12, 0.12)
-    color = COLORS["anthropic"] if (lkh == 3 and imp == 3) else (COLORS["warn"] if imp == 3 or lkh == 3 else COLORS["neutral"])
-    ax.scatter(jx, jy, s=280, color=color, alpha=0.75, zorder=3, edgecolors="white", lw=1.5)
-    ax.annotate(label, (jx, jy), textcoords="offset points", xytext=(8, 4),
-                fontsize=7.5, color="#1E293B")
 
-ax.set_xlim(0.5, 3.7)
-ax.set_ylim(0.5, 3.7)
-ax.set_xticks([1, 2, 3])
-ax.set_xticklabels(["Low", "Medium", "High"])
-ax.set_yticks([1, 2, 3])
-ax.set_yticklabels(["Low", "Medium", "High"])
-ax.set_xlabel("Likelihood")
-ax.set_ylabel("Impact")
-ax.set_title("Risk Matrix — 30-60-90 Day Plan")
-# quadrant shading
-ax.fill_between([2.5, 3.7], [2.5, 2.5], [3.7, 3.7], color="#FEE2E2", alpha=0.35, zorder=0)
-ax.text(3.0, 3.5, "Act now", fontsize=8, color="#DC2626", alpha=0.7)
-plt.tight_layout()
-plt.savefig(OUT + "chart7_risk_matrix.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 7 done")
+# fixed offsets per point to avoid overlap
+offsets = [(10, 10), (-90, 12), (10, -44), (10, 10), (10, 10), (-92, -40), (10, -44), (-105, 12)]
 
-# ══════════════════════════════════════════════════════════════════════════════
-# Chart 8 — KPI Targets Timeline
-# ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(10, 4.5))
-ax.axis("off")
-kpi_data = [
-    ["New API signups/week",         "Baseline W1",           "Baseline +20%",   "Track trend"],
-    ["Claude Code → API conversion", "Instrument (W1)",       "+30%",            "Full rollout if E3 wins"],
-    ["TTFAC <5 min rate",            "Measure",               "≥50% of signups", "Sustain / extend to docs"],
-    ["D7 retention",                 "Measure",               ">40% (PLG P75)",  "Cohort analysis"],
-    ["Free → paid conversion",       "Baseline W1",           "+20%",            "Revenue attribution"],
-    ["$10K→$100K ARR expansion",     "Baseline W1",           "Track rate",      "Key for Thesis B decision"],
-]
-col_labels = ["Metric", "Days 1–30", "Days 31–60", "Days 61–90"]
-tbl = ax.table(cellText=kpi_data, colLabels=col_labels,
-               loc="center", cellLoc="left")
-tbl.auto_set_font_size(False)
-tbl.set_fontsize(8.5)
-tbl.scale(1, 2.1)
-for (row, col), cell in tbl.get_celld().items():
-    cell.set_edgecolor("#E2E8F0")
-    if row == 0:
-        cell.set_facecolor("#1E293B")
-        cell.get_text().set_color("white")
-        cell.get_text().set_fontweight("bold")
-    elif col == 0:
-        cell.set_facecolor("#F1F5F9")
-    elif col == 2:
-        cell.set_facecolor(COLORS["ok"] + "18")
-    else:
-        cell.set_facecolor("#FAFAFA")
-ax.set_title("KPI Framework — Targets by Phase", fontweight="bold", y=0.98)
-fig.text(0.5, 0.01, "D30 retention measurable only for cohorts from Days 1–60. E3 requires Week 1 instrumentation as prerequisite.",
-         ha="center", fontsize=7.5, color="#64748B")
-plt.tight_layout()
-plt.savefig(OUT + "chart8_kpi_framework.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 8 done")
+rng = np.random.default_rng(42)
+for (label, lkh, imp, clr), (ox, oy) in zip(risks, offsets):
+    jx = lkh + rng.uniform(-0.08, 0.08)
+    jy = imp  + rng.uniform(-0.08, 0.08)
+    ax.scatter(jx, jy, s=340, color=clr, alpha=0.80, zorder=4,
+               edgecolors="white", linewidths=2)
+    ax.annotate(label, (jx, jy), textcoords="offset points",
+                xytext=(ox, oy), fontsize=9, color=TEXT, va="center",
+                arrowprops=dict(arrowstyle="-", color=SUBTLE, lw=0.8),
+                bbox=dict(boxstyle="round,pad=0.3", facecolor=BG, edgecolor=BORDER, lw=0.8))
+
+ax.set_xlim(0.4, 3.7); ax.set_ylim(0.4, 3.7)
+ax.set_xticks([1, 2, 3]); ax.set_xticklabels(["Low", "Medium", "High"], fontsize=11)
+ax.set_yticks([1, 2, 3]); ax.set_yticklabels(["Low", "Medium", "High"], fontsize=11)
+ax.set_xlabel("Likelihood", labelpad=10)
+ax.set_ylabel("Impact", labelpad=10)
+ax.set_title("Risk Matrix — 30-60-90 Day Plan", color=TEXT)
+ax.fill_between([2.5, 3.7], [2.5, 2.5], [3.7, 3.7], color="#fde8e8", alpha=0.5, zorder=0)
+ax.text(3.05, 3.55, "Act now", fontsize=10, color="#b91c1c", fontweight="bold")
+ax.grid(True, color=BORDER, zorder=0); ax.set_axisbelow(True)
+save("chart7_risk_matrix.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Chart 9 — Claude Platform Growth Signals
-# ══════════════════════════════════════════════════════════════════════════════
-fig, axes = plt.subplots(1, 3, figsize=(11, 4))
-
-# 9a: $1M+ ARR accounts
-ax = axes[0]
-ax.bar(["Jan 2025", "Apr 2026"], [12, 500], color=[COLORS["neutral"], COLORS["anthropic"]], width=0.5)
-ax.set_title("$1M+ ARR Accounts")
-ax.set_ylabel("Count")
-ax.text(1, 515, "500+\n(41×)", ha="center", fontweight="bold", color=COLORS["anthropic"])
-ax.text(0, 27, "12", ha="center", fontweight="bold", color="#64748B")
-ax.text(0.5, -70, "41× growth in ~15 months", ha="center", fontsize=8, color="#64748B",
-        transform=ax.transData)
-
-# 9b: Claude Code business subs (index 100 = Jan 2026)
-ax = axes[1]
-months = ["Jan 2026", "May 2026"]
-vals = [100, 400]
-ax.plot(months, vals, "o-", color=COLORS["anthropic"], lw=2.5, ms=8)
-ax.fill_between(months, vals, alpha=0.12, color=COLORS["anthropic"])
-ax.set_title("Claude Code Business Subscriptions\n(Index: Jan 2026 = 100)")
-ax.set_ylabel("Index")
-ax.set_ylim(0, 450)
-ax.text(1, 415, "4×", ha="center", fontweight="bold", color=COLORS["anthropic"], fontsize=13)
-
-# 9c: Developer engagement
-ax = axes[2]
-platforms = ["Claude Code\n(Anthropic)", "Industry\nAverage*"]
-hours = [20, 5]
-clrs2 = [COLORS["anthropic"], COLORS["neutral"]]
-bars = ax.bar(platforms, hours, color=clrs2, width=0.45)
-ax.set_title("Developer Engagement\n(Hours/Week)")
-ax.set_ylabel("Avg hrs/week")
-for bar, h in zip(bars, hours):
-    ax.text(bar.get_x() + bar.get_width()/2, h + 0.3, f"{h}h", ha="center", fontweight="bold")
-ax.text(0.5, -3.8, "*Industry average estimated; Claude Code figure per Anthropic public disclosures.",
-        ha="center", fontsize=7.5, color="#64748B", transform=ax.transData)
-
-plt.suptitle("Anthropic Growth Signals (May 2026)", fontweight="bold", y=1.02)
-plt.tight_layout()
-plt.savefig(OUT + "chart9_growth_signals.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 9 done")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# Chart 10 — 30-60-90 Day Gantt
+# Chart 8 — KPI Framework (horizontal grouped)
 # ══════════════════════════════════════════════════════════════════════════════
 fig, ax = plt.subplots(figsize=(11, 5.5))
-tasks = [
-    # (label, start_day, duration, color, phase)
-    ("Shadow teams (DevRel, Eng, Billing, DS)",    1, 7,  COLORS["neutral"],   0),
-    ("Build live funnel dashboard",                 1, 14, COLORS["neutral"],   0),
-    ("Developer research sprint (12 interviews)",   8, 7,  COLORS["google"],    0),
-    ("Session replay audit + competitor onboarding",8, 7,  COLORS["google"],    0),
-    ("Funnel data deep dive + thesis selection",    15, 7, COLORS["openai"],    0),
-    ("Stakeholder alignment + 30-day Loom readout", 22, 8, COLORS["openai"],   0),
-    ("E1: In-console quickstart (A/B live)",        31, 21, COLORS["ok"],       1),
-    ("E2: Contextual upgrade CTA (A/B live)",       31, 28, COLORS["anthropic"],1),
-    ("E3: Claude Code→API (validate assumption)",   31, 7,  COLORS["warn"],     1),
-    ("E3: Build & instrument (if assumption holds)",38, 21, COLORS["warn"],     1),
-    ("Kill review — stop no-signal experiments",    52, 3,  "#DC2626",          1),
-    ("Scale E1 winner → docs + SDKs",              61, 20, COLORS["ok"],       2),
-    ("Scale E2 winner → all limit surfaces",        61, 20, COLORS["anthropic"],2),
-    ("Draft platform thesis (A/B/C)",               61, 14, COLORS["neutral"],  2),
-    ("Present platform thesis to leadership",       85, 5,  COLORS["openai"],   2),
-]
-yticks = []
-ylabels = []
-phase_labels = {0: "Days 1–30: Listen", 1: "Days 31–60: Experiment", 2: "Days 61–90: Execute"}
-phase_colors = {0: "#F0F9FF", 1: "#FFF7ED", 2: "#F0FDF4"}
-ax.axvspan(1,  30, alpha=0.25, color=phase_colors[0], zorder=0)
-ax.axvspan(31, 60, alpha=0.25, color=phase_colors[1], zorder=0)
-ax.axvspan(61, 90, alpha=0.25, color=phase_colors[2], zorder=0)
-for i, (label, start, dur, clr, phase) in enumerate(tasks):
-    ax.barh(i, dur, left=start, height=0.6, color=clr, alpha=0.85, zorder=2)
-    yticks.append(i)
-    ylabels.append(label)
-ax.set_yticks(yticks)
-ax.set_yticklabels(ylabels, fontsize=8.5)
-ax.set_xlim(0, 92)
-ax.set_xlabel("Day")
-ax.set_title("30-60-90 Day Plan — Task Timeline")
-for day, label in [(1, "D1"), (30, "D30"), (31, "D31"), (60, "D60"), (61, "D61"), (90, "D90")]:
-    ax.axvline(day, color="#94A3B8", lw=0.7, ls="--", alpha=0.6)
-for phase, (start, end) in {0: (1, 30), 1: (31, 60), 2: (61, 90)}.items():
-    ax.text((start + end)/2, len(tasks) + 0.2, phase_labels[phase],
-            ha="center", fontsize=8.5, fontweight="bold", color="#1E293B")
-plt.tight_layout()
-plt.savefig(OUT + "chart10_gantt.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Chart 10 done")
+fig.subplots_adjust(left=0.28, right=0.97, top=0.88, bottom=0.08)
 
-print("\n✅ All 10 charts saved to", OUT)
+metrics = [
+    "$10K→$100K ARR\nexpansion",
+    "Free → paid\nconversion",
+    "D7 retention",
+    "TTFAC <5 min\nrate",
+    "Claude Code →\nAPI conversion",
+    "New API\nsignups/week",
+]
+d30  = ["Baseline W1", "Baseline W1", "Measure", "Measure", "Instrument W1", "Baseline W1"]
+d60  = ["Track rate",  "+20%",        ">40% PLG P75", "≥50% signups", "+30%", "Baseline +20%"]
+
+y = np.arange(len(metrics))
+h = 0.35
+b1 = ax.barh(y + h/2, [1]*len(metrics), h, color=BG_MID,  edgecolor=BORDER, lw=1, zorder=2)
+b2 = ax.barh(y - h/2, [1]*len(metrics), h, color=ORANGE,  alpha=0.25, edgecolor=ORANGE, lw=1, zorder=2)
+
+ax.set_yticks(y)
+ax.set_yticklabels(metrics, fontsize=10.5)
+ax.set_xlim(0, 3.2)
+ax.set_xticks([0.5, 1.5])
+ax.set_xticklabels(["Days 1–30", "Days 31–60"], fontsize=11)
+ax.set_title("KPI Framework — Targets by Phase", color=TEXT)
+ax.yaxis.set_tick_params(length=0)
+
+for i, (t30, t60) in enumerate(zip(d30, d60)):
+    ax.text(0.5, i + h/2, t30, ha="center", va="center", fontsize=9.5, color=MUTED)
+    ax.text(1.5, i - h/2, t60, ha="center", va="center", fontsize=9.5,
+            color=ORANGE_D, fontweight="bold")
+
+ax.text(0.5, -0.07,
+        "D30 retention measurable only for cohorts from Days 1–60  ·  E3 requires Week 1 instrumentation as prerequisite",
+        ha="center", transform=ax.transAxes, fontsize=9, color=MUTED)
+save("chart8_kpi_framework.png")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Chart 9 — Growth Signals (3 panels)
+# ══════════════════════════════════════════════════════════════════════════════
+fig, axes = plt.subplots(1, 3, figsize=(12, 5))
+fig.subplots_adjust(left=0.07, right=0.97, top=0.80, bottom=0.18, wspace=0.4)
+fig.suptitle("Anthropic Growth Signals  (May 2026)", fontsize=14,
+             fontweight="bold", color=TEXT, y=0.96)
+
+# 9a
+ax = axes[0]
+ax.bar(["Jan 2025", "Apr 2026"], [12, 500],
+       color=[SUBTLE, ORANGE], width=0.45, zorder=2)
+ax.set_title("$1M+ ARR Accounts", color=TEXT, fontsize=12)
+ax.set_ylabel("Count")
+ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+ax.set_ylim(0, 580)
+ax.text(0, 28,  "12",    ha="center", fontsize=12, fontweight="bold", color="white")
+ax.text(1, 516, "500+",  ha="center", fontsize=12, fontweight="bold", color=ORANGE)
+ax.text(1, 548, "41×",   ha="center", fontsize=11, color=ORANGE_D, fontweight="bold",
+        bbox=dict(boxstyle="round,pad=0.25", facecolor="#fdf5f0", edgecolor=ORANGE, lw=1))
+
+# 9b
+ax = axes[1]
+months = ["Jan 2026", "May 2026"]
+vals   = [100, 400]
+ax.plot(months, vals, "o-", color=ORANGE, lw=2.8, ms=9, zorder=3)
+ax.fill_between(months, vals, alpha=0.10, color=ORANGE, zorder=2)
+ax.set_title("Claude Code Business\nSubscriptions  (Index 100 = Jan 2026)", color=TEXT, fontsize=11)
+ax.set_ylabel("Index")
+ax.set_ylim(0, 470)
+ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+ax.text(0, 112, "100", ha="center", fontsize=11, color=MUTED)
+ax.text(1, 412, "400", ha="center", fontsize=11, fontweight="bold", color=ORANGE)
+ax.text(0.5, 440, "4×  growth", ha="center", fontsize=12,
+        color=ORANGE_D, fontweight="bold",
+        bbox=dict(boxstyle="round,pad=0.3", facecolor="#fdf5f0", edgecolor=ORANGE, lw=1))
+
+# 9c
+ax = axes[2]
+platforms = ["Claude Code\n(Anthropic)", "Industry\nAverage*"]
+hours     = [20, 5]
+bars      = ax.bar(platforms, hours, color=[ORANGE, SUBTLE], width=0.42, zorder=2)
+ax.set_title("Developer Engagement\n(Hours / Week)", color=TEXT, fontsize=12)
+ax.set_ylabel("Avg hrs / week")
+ax.set_ylim(0, 26)
+ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
+for bar, h in zip(bars, hours):
+    ax.text(bar.get_x() + bar.get_width()/2, h + 0.5, f"{h}h",
+            ha="center", va="bottom", fontsize=13, fontweight="bold", color=TEXT)
+ax.text(0.5, -0.16, "* Industry average estimated",
+        ha="center", transform=ax.transAxes, fontsize=8.5, color=MUTED)
+
+save("chart9_growth_signals.png")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Chart 10 — Gantt
+# ══════════════════════════════════════════════════════════════════════════════
+fig, ax = plt.subplots(figsize=(13, 7))
+fig.subplots_adjust(left=0.34, right=0.98, top=0.90, bottom=0.09)
+
+tasks = [
+    ("Shadow DevRel · Eng · Billing · DS",          1,  7,  SUBTLE,   0),
+    ("Build live funnel dashboard",                   1,  14, SUBTLE,   0),
+    ("12 developer interviews (4 segments)",          8,  7,  BLUE,     0),
+    ("Session replay audit + competitor onboarding",  8,  7,  BLUE,     0),
+    ("Funnel data deep dive + thesis selection",      15, 7,  C_GOOGLE, 0),
+    ("Stakeholder alignment + 30-day Loom readout",   22, 8,  C_GOOGLE, 0),
+    ("E1: In-console quickstart  (A/B live)",         31, 21, GREEN,    1),
+    ("E2: Contextual upgrade CTA  (A/B live)",        31, 28, ORANGE,   1),
+    ("E3: Claude Code→API  (validate assumption)",    31, 7,  BLUE,     1),
+    ("E3: Build + instrument  (if <40% converted)",   38, 21, BLUE,     1),
+    ("Kill review — stop no-signal experiments",      52, 3,  "#b91c1c", 1),
+    ("Scale E1 winner → docs + SDKs",                61, 20, GREEN,    2),
+    ("Scale E2 winner → all limit surfaces",          61, 20, ORANGE,   2),
+    ("Draft + socialise platform thesis",             61, 14, SUBTLE,   2),
+    ("Present platform thesis to leadership",         85, 5,  C_GOOGLE, 2),
+]
+
+phase_bg = {0: "#edf4fb", 1: "#fdf5f0", 2: "#f0f7ec"}
+for ph, (s, e) in {0: (1, 30), 1: (31, 60), 2: (61, 90)}.items():
+    ax.axvspan(s, e, alpha=0.35, color=phase_bg[ph], zorder=0)
+
+for i, (label, start, dur, clr, ph) in enumerate(tasks):
+    ax.barh(i, dur, left=start, height=0.55, color=clr, alpha=0.88, zorder=2)
+
+ax.set_yticks(range(len(tasks)))
+ax.set_yticklabels([t[0] for t in tasks], fontsize=9.5)
+ax.set_xlim(0, 93)
+ax.set_xlabel("Day")
+ax.set_title("30-60-90 Day Plan — Task Timeline", color=TEXT)
+ax.xaxis.grid(True, color=BORDER, zorder=1, alpha=0.7); ax.set_axisbelow(True)
+
+for day in [1, 30, 31, 60, 61, 90]:
+    ax.axvline(day, color=SUBTLE, lw=0.9, ls="--", alpha=0.7, zorder=3)
+
+phase_names = {0: "Days 1–30\nListen", 1: "Days 31–60\nExperiment", 2: "Days 61–90\nExecute"}
+for ph, (s, e) in {0: (1, 30), 1: (31, 60), 2: (61, 90)}.items():
+    ax.text((s+e)/2, len(tasks) + 0.05, phase_names[ph],
+            ha="center", va="bottom", fontsize=9, fontweight="bold",
+            color=TEXT, linespacing=1.4)
+
+save("chart10_gantt.png")
+
+print("\nAll 10 charts regenerated.")
