@@ -88,8 +88,8 @@ save("chart1_arr_comparison.png")
 # ══════════════════════════════════════════════════════════════════════════════
 # Chart 2 — Developer Community Scale
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(9, 5))
-fig.subplots_adjust(left=0.1, right=0.95, top=0.82, bottom=0.22)
+fig, ax = plt.subplots(figsize=(9, 5.8))
+fig.subplots_adjust(left=0.1, right=0.95, top=0.84, bottom=0.18)
 
 labels = ["OpenAI", "Google\nGemini", "AWS\nBedrock", "Cohere\n(enterprise)"]
 devs   = [4_000_000, 2_400_000, 100_000, 17_000]
@@ -100,19 +100,20 @@ ax.set_ylabel("Active Developers / Organizations")
 ax.set_title("API Developer Community Scale  (May 2026)", color=TEXT)
 ax.yaxis.set_major_formatter(
     ticker.FuncFormatter(lambda x, _: f"{x/1e6:.1f}M" if x >= 1e6 else f"{int(x/1000)}K"))
-ax.set_ylim(0, 4_800_000)
+ax.set_ylim(0, 5_200_000)   # extra headroom so bar labels don't crowd title
 ax.yaxis.grid(True, zorder=0)
 ax.set_axisbelow(True)
 
 for bar, val in zip(bars, devs):
     label = f"{val/1e6:.1f}M" if val >= 1e6 else f"{val:,}"
-    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 60_000,
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 80_000,
             label, ha="center", va="bottom", fontsize=12, fontweight="bold", color=TEXT)
 
-ax.text(0.5, -0.18,
-        "Anthropic developer community not publicly disclosed.\n"
-        "70× API volume YoY signals intensity per developer — not breadth vs. competitors.",
-        ha="center", transform=ax.transAxes, fontsize=9, color=MUTED, linespacing=1.6)
+# footnote inside figure area — clear of x-axis tick labels
+fig.text(0.5, 0.03,
+         "Anthropic developer community not publicly disclosed.  "
+         "70× API volume YoY signals intensity per developer — not breadth.",
+         ha="center", fontsize=9, color=MUTED)
 save("chart2_developer_scale.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -185,14 +186,14 @@ ax.bar(x + w, market_fit,  w, label="Market Fit",  color=BLUE,    zorder=2)
 
 ax.set_xticks(x)
 ax.set_xticklabels(pocs, fontsize=10)
-ax.set_ylim(0, 7.4)
+ax.set_ylim(0, 8.8)
 ax.set_ylabel("Score  (1 – 5)")
 ax.set_title("OST Recommended POCs — Feasibility · Impact · Market Fit", color=TEXT)
 ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
-ax.legend(fontsize=10, framealpha=0, loc="upper right")
+ax.legend(fontsize=10, framealpha=0, loc="lower left")
 
 for xi, total in zip(x, totals):
-    ax.text(xi, 6.15, f"Total: {total}/15",
+    ax.text(xi, 6.6, f"Total: {total}/15",
             ha="center", fontsize=11, fontweight="bold", color=TEXT,
             bbox=dict(boxstyle="round,pad=0.3", facecolor=BG_MID, edgecolor=BORDER, lw=1))
 
@@ -295,10 +296,19 @@ risks = [
 # fixed offsets per point to avoid overlap
 offsets = [(10, 10), (-90, 12), (10, -44), (10, 10), (10, 10), (-92, -40), (10, -44), (-105, 12)]
 
-rng = np.random.default_rng(42)
-for (label, lkh, imp, clr), (ox, oy) in zip(risks, offsets):
-    jx = lkh + rng.uniform(-0.08, 0.08)
-    jy = imp  + rng.uniform(-0.08, 0.08)
+fixed_jitter = [
+    (0.0,   0.0),   # risk 0: (3,2) — unique
+    (-0.18, 0.15),  # risk 1: (3,3) — pair a
+    ( 0.18,-0.15),  # risk 2: (3,3) — pair b
+    (-0.18, 0.15),  # risk 3: (2,3) — pair a
+    (0.0,   0.0),   # risk 4: (1,2) — unique
+    (-0.18,-0.15),  # risk 5: (2,2) — pair a
+    ( 0.18, 0.15),  # risk 6: (2,2) — pair b
+    ( 0.18,-0.15),  # risk 7: (2,3) — pair b
+]
+for (label, lkh, imp, clr), (ox, oy), (djx, djy) in zip(risks, offsets, fixed_jitter):
+    jx = lkh + djx
+    jy = imp  + djy
     ax.scatter(jx, jy, s=340, color=clr, alpha=0.80, zorder=4,
                edgecolors="white", linewidths=2)
     ax.annotate(label, (jx, jy), textcoords="offset points",
@@ -372,10 +382,10 @@ ax.bar(["Jan 2025", "Apr 2026"], [12, 500],
 ax.set_title("$1M+ ARR Accounts", color=TEXT, fontsize=12)
 ax.set_ylabel("Count")
 ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
-ax.set_ylim(0, 580)
+ax.set_ylim(0, 680)
 ax.text(0, 28,  "12",    ha="center", fontsize=12, fontweight="bold", color="white")
 ax.text(1, 516, "500+",  ha="center", fontsize=12, fontweight="bold", color=ORANGE)
-ax.text(1, 548, "41×",   ha="center", fontsize=11, color=ORANGE_D, fontweight="bold",
+ax.text(1, 600, "41×",   ha="center", fontsize=11, color=ORANGE_D, fontweight="bold",
         bbox=dict(boxstyle="round,pad=0.25", facecolor="#fdf5f0", edgecolor=ORANGE, lw=1))
 
 # 9b
@@ -386,11 +396,11 @@ ax.plot(months, vals, "o-", color=ORANGE, lw=2.8, ms=9, zorder=3)
 ax.fill_between(months, vals, alpha=0.10, color=ORANGE, zorder=2)
 ax.set_title("Claude Code Business\nSubscriptions  (Index 100 = Jan 2026)", color=TEXT, fontsize=11)
 ax.set_ylabel("Index")
-ax.set_ylim(0, 470)
+ax.set_ylim(0, 560)
 ax.yaxis.grid(True, zorder=0); ax.set_axisbelow(True)
 ax.text(0, 112, "100", ha="center", fontsize=11, color=MUTED)
 ax.text(1, 412, "400", ha="center", fontsize=11, fontweight="bold", color=ORANGE)
-ax.text(0.5, 440, "4×  growth", ha="center", fontsize=12,
+ax.text(0.5, 500, "4×  growth", ha="center", fontsize=12,
         color=ORANGE_D, fontweight="bold",
         bbox=dict(boxstyle="round,pad=0.3", facecolor="#fdf5f0", edgecolor=ORANGE, lw=1))
 
@@ -415,7 +425,7 @@ save("chart9_growth_signals.png")
 # Chart 10 — Gantt
 # ══════════════════════════════════════════════════════════════════════════════
 fig, ax = plt.subplots(figsize=(13, 7))
-fig.subplots_adjust(left=0.34, right=0.98, top=0.90, bottom=0.09)
+fig.subplots_adjust(left=0.34, right=0.98, top=0.90, bottom=0.11)
 
 tasks = [
     ("Shadow DevRel · Eng · Billing · DS",          1,  7,  SUBTLE,   0),
@@ -452,10 +462,12 @@ ax.xaxis.grid(True, color=BORDER, zorder=1, alpha=0.7); ax.set_axisbelow(True)
 for day in [1, 30, 31, 60, 61, 90]:
     ax.axvline(day, color=SUBTLE, lw=0.9, ls="--", alpha=0.7, zorder=3)
 
+ax.set_ylim(-2.4, len(tasks) - 0.3)
+
 phase_names = {0: "Days 1–30\nListen", 1: "Days 31–60\nExperiment", 2: "Days 61–90\nExecute"}
 for ph, (s, e) in {0: (1, 30), 1: (31, 60), 2: (61, 90)}.items():
-    ax.text((s+e)/2, len(tasks) + 0.05, phase_names[ph],
-            ha="center", va="bottom", fontsize=9, fontweight="bold",
+    ax.text((s+e)/2, -1.5, phase_names[ph],
+            ha="center", va="center", fontsize=9, fontweight="bold",
             color=TEXT, linespacing=1.4)
 
 save("chart10_gantt.png")
