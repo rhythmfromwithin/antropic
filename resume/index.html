@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tao Zhang — PM, API Growth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F7F4F0;
+      --surface: #FFFFFF;
+      --border: #E8E2D9;
+      --text: #1C1917;
+      --text-secondary: #57534E;
+      --text-muted: #A8A29E;
+      --accent: #CC5500;
+      --accent-light: #FFF3ED;
+      --accent-mid: #FDDCCA;
+      --tag-bg: #F0EDE8;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 24px;
+      padding-bottom: 36px;
+      border-bottom: 1.5px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    .header-name {
+      font-size: 2.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .header-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .header-contact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      padding-top: 6px;
+    }
+
+    .header-contact a,
+    .header-contact span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .header-contact a:hover { color: var(--accent); }
+
+    /* ── Stat bar ── */
+    .stat-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 48px; }
+
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Summary ── */
+    .summary-box {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .summary-box strong { color: var(--text); font-weight: 600; }
+
+    /* ── Tags ── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── Experience ── */
+    .exp-list { display: flex; flex-direction: column; gap: 20px; }
+
+    .exp-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .exp-card:hover { border-color: #D6CFC6; }
+
+    .exp-card.featured { border-color: var(--accent-mid); }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 20px 24px 16px;
+      gap: 16px;
+    }
+
+    .exp-company {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .exp-role {
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+    .exp-period {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+
+    .exp-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding: 0 24px 12px;
+      font-style: italic;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-bullets {
+      padding: 16px 24px 20px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .exp-bullets li {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .exp-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+      top: 2px;
+    }
+
+    .exp-bullets li strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Featured badge */
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-mid);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-left: 10px;
+    }
+
+    /* ── Education ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .edu-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    .edu-degree {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .edu-school {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .edu-year {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 6px;
+    }
+
+    /* ── Constraint callout ── */
+    .constraint-box {
+      background: var(--accent-light);
+      border: 1.5px solid var(--accent-mid);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .constraint-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .constraint-text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; }
+      .page { padding: 24px; }
+      .stat-card, .exp-card, .edu-card { break-inside: avoid; }
+      .constraint-box { display: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .header { grid-template-columns: 1fr; }
+      .header-contact { align-items: flex-start; }
+      .header-name { font-size: 2rem; }
+      .stat-bar { grid-template-columns: repeat(2, 1fr); }
+      .edu-grid { grid-template-columns: 1fr; }
+      .exp-header { flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <div>
+      <h1 class="header-name">Tao Zhang</h1>
+      <p class="header-title">Product Manager · API Growth &amp; Developer Platforms</p>
+    </div>
+    <div class="header-contact">
+      <a href="mailto:taozhang.product@gmail.com">taozhang.product@gmail.com</a>
+      <span>+1 646 515 7618</span>
+      <a href="https://www.linkedin.com/in/taozhangnyu/" target="_blank">linkedin.com/in/taozhangnyu</a>
+    </div>
+  </header>
+
+  <!-- Stat bar -->
+  <div class="stat-bar">
+    <div class="stat-card">
+      <div class="stat-value">7+</div>
+      <div class="stat-label">Years PM Experience</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">70%</div>
+      <div class="stat-label">MoM Sales in 48h</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">75%</div>
+      <div class="stat-label">Conversion Rate Lift</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">10M+</div>
+      <div class="stat-label">Users Reached</div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <section class="section">
+    <h2 class="section-title">Summary</h2>
+    <div class="summary-box">
+      Product manager with <strong>7+ years</strong> building growth-focused products across <strong>developer platforms, marketplace APIs, and AI-native tooling</strong>. Currently shipping API-powered MVPs integrating Amazon, eBay, Etsy, and Shopify ecosystems — designing self-serve workflows, activation funnels, and multi-source data pipelines for SMB developers. <strong>Hands-on with Claude API and Claude Code</strong> in daily product development. Technical background in data science and ML (NYU MS Information Systems; DeepLearning.AI ML in Production).
+      <div class="tags">
+        <span class="tag">API Growth</span>
+        <span class="tag">Developer Platforms</span>
+        <span class="tag">Activation Funnels</span>
+        <span class="tag">A/B Testing</span>
+        <span class="tag">Claude API</span>
+        <span class="tag">Claude Code</span>
+        <span class="tag">Prototype-First</span>
+        <span class="tag">PLG</span>
+        <span class="tag">Usage-Based Pricing</span>
+        <span class="tag">Self-Serve GTM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="section">
+    <h2 class="section-title">Experience</h2>
+    <div class="exp-list">
+
+      <!-- Tec-Do -->
+      <div class="exp-card featured">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">
+              Tec-Do 2.0
+              <span class="featured-badge">Most Relevant</span>
+            </div>
+            <div class="exp-role">AI Agent Product Manager</div>
+          </div>
+          <div class="exp-period">2026 – Present</div>
+        </div>
+        <div class="exp-desc">AI-driven global digital marketing and martech company — performance advertising, content automation, cross-border growth.</div>
+        <ul class="exp-bullets">
+          <li>Built <strong>3 API-powered MVPs</strong> integrating Amazon, eBay, Etsy, and Shopify ecosystems — designed self-serve onboarding workflows and cross-platform data pipelines that took developers from API key to first actionable insight in a single session.</li>
+          <li>Designed developer-facing <strong>activation flows</strong> for SMB brands: defined the activation event (first successful cross-platform data query), instrumented the funnel, and ran iterative improvements against it.</li>
+          <li>Architected multi-source API orchestration systems supporting competitive benchmarking, inventory planning, and growth opportunity identification — reducing time-to-insight from days to minutes.</li>
+          <li>Integrated <strong>Claude, Claude API, and Claude Code</strong> into daily product development workflows — eliminating traditional spec documents in favor of prototype-first iteration.</li>
+          <li>Built AI-native operating workflows combining LLMs, APIs, and lightweight automation tooling; reduced iteration time by shipping internally first and treating real usage data as the primary spec.</li>
+        </ul>
+      </div>
+
+      <!-- AI Lab -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">Tao's AI × Product Lab</div>
+            <div class="exp-role">Founder</div>
+          </div>
+          <div class="exp-period">2023 – Present</div>
+        </div>
+        <div class="exp-desc">Self-directed innovation lab — generative AI applied to product management, from ideation through prototyping and system design.</div>
+        <ul class="exp-bullets">
+          <li>Prototyped and deployed a <strong>Claude-powered web app</strong> using AI-generated code and design assets — completing the full lifecycle (discovery → build → ship → iterate) without a traditional engineering team.</li>
+          <li>Launched <strong>3 Replit-powered web apps</strong> via AI-assisted development, demonstrating rapid idea-to-MVP execution.</li>
+          <li>Built a scalable AI-powered publishing system organizing <strong>200K+ words</strong> — automated write → edit → publish → archive pipeline using Markdown, GitHub Pages, and Python. Published 20+ research newsletters on AI product management.</li>
+        </ul>
+      </div>
+
+      <!-- PCOnline -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">PCOnline</div>
+            <div class="exp-role">Senior Product Manager — Growth &amp; GTM</div>
+          </div>
+          <div class="exp-period">2022 – 2023</div>
+        </div>
+        <div class="exp-desc">Leading e-commerce supplier of consumer electronics on Walmart and Amazon marketplaces.</div>
+        <ul class="exp-bullets">
+          <li>Achieved <strong>70% MoM sales increase in 48 hours</strong> during Prime Day 2023, generating <strong>$375K in revenue</strong>, by managing end-to-end GTM strategy and lifecycle for 7 key products.</li>
+          <li>Boosted profit <strong>200% in 1 month</strong> for 3 underperforming products by analyzing historical return data and reallocating to highest-ROI sales channels.</li>
+        </ul>
+      </div>
+
+      <!-- Ziff Davis -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">Ziff Davis</div>
+            <div class="exp-role">Product Manager</div>
+          </div>
+          <div class="exp-period">2021 – 2022</div>
+        </div>
+        <div class="exp-desc">NASDAQ: ZD — vertically focused digital media and internet company.</div>
+        <ul class="exp-bullets">
+          <li>Increased conversion rate <strong>75% WoW</strong> by conducting competitor analyses and streamlining the end-to-end shopping experience.</li>
+          <li>Improved customer engagement <strong>86% MoM</strong> by systematically incorporating 25+ user feedback items — defining a repeatable feedback-to-feature loop across 6 cross-functional directors.</li>
+        </ul>
+      </div>
+
+      <!-- NYU -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">New York University</div>
+            <div class="exp-role">Data Scientist — Big Data, Cloud &amp; ML</div>
+          </div>
+          <div class="exp-period">2020 – 2021</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Improved model training speed <strong>130% in 3 weeks</strong> by designing Python workflows on Azure.</li>
+          <li>Built <strong>8 data pipelines</strong> supporting medical data visualization, increasing analytical output <strong>400%</strong> and enabling 20+ heatmaps identifying biomarker–organ damage relationships.</li>
+          <li>Increased engineering velocity <strong>60% in 3 months</strong> by refactoring legacy codebases.</li>
+        </ul>
+      </div>
+
+      <!-- ByteDance -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">ByteDance</div>
+            <div class="exp-role">Product Manager</div>
+          </div>
+          <div class="exp-period">2015 – 2017</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Built internal platform to manage Smartisan OS apps, improving engineering productivity <strong>400% in 3 months</strong> and reducing a 4-day task to minutes.</li>
+          <li>Launched Smartisan e-commerce mobile store, driving <strong>50% revenue increase in 3 months</strong> and growing the user base to <strong>3.68M users within 6 months</strong>.</li>
+          <li>Led launch of 12+ features optimizing the full user journey: signup/login, shopping, order tracking, and refund flow.</li>
+        </ul>
+      </div>
+
+      <!-- ExcitingPR -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">ExcitingPR</div>
+            <div class="exp-role">Senior Product Manager</div>
+          </div>
+          <div class="exp-period">2017 – 2019</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Developed and launched 15 digital marketing mobile solutions for Fortune 500 clients including ByteDance, Huawei, and Tencent — resulting in <strong>3M new registered active users within 2 years</strong>.</li>
+          <li>Improved team productivity <strong>300% in 2 months</strong> by introducing agile practices across 10+ PM managers.</li>
+        </ul>
+      </div>
+
+      <!-- Tencent -->
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">Tencent</div>
+            <div class="exp-role">Associate Product Manager</div>
+          </div>
+          <div class="exp-period">2014 – 2015</div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Launched 25+ features for iOS/Android reading app, achieving <strong>15% MoM growth in paid users</strong> and <strong>33% user base growth</strong> to 1.07M users in 8 months.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section class="section">
+    <h2 class="section-title">Education</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-degree">MS, Information Systems</div>
+        <div class="edu-school">New York University</div>
+        <div class="edu-year">2019 – 2021</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">BS, Information &amp; Computing Science</div>
+        <div class="edu-school">Beijing University of Chemical Technology</div>
+        <div class="edu-year">2009 – 2013</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">Machine Learning in Production</div>
+        <div class="edu-school">DeepLearning.AI — Certification</div>
+        <div class="edu-year">Completed</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
