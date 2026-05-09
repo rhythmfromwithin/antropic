@@ -4,538 +4,961 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anthropic — PM, API Growth: Strategic Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --border: #2a2d3a;
-    --text: #e2e8f0;
-    --muted: #94a3b8;
-    --accent: #C25B2D;
-    --ok: #22c55e;
-    --warn: #f59e0b;
-    --blue: #60a5fa;
+    --cream:      #faf9f5;
+    --cream-mid:  #eeece2;
+    --cream-dark: #e0ddd3;
+    --border:     #e8e6dc;
+    --text:       #3d3929;
+    --muted:      #7c7a6e;
+    --subtle:     #b0aea5;
+    --orange:     #d97757;
+    --orange-dk:  #bd5d3a;
+    --blue:       #6a9bcc;
+    --green:      #788c5d;
+    --ok-bg:      #f0f4e8;
+    --ok-text:    #3d5224;
+    --warn-bg:    #fdf3e8;
+    --warn-text:  #7a4010;
+    --info-bg:    #edf4fb;
+    --info-text:  #1e4a72;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
 
-  /* Nav */
-  nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
-  nav .logo { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: white; flex-shrink: 0; }
-  nav .title { font-weight: 600; font-size: 14px; }
-  nav .sub { color: var(--muted); font-size: 13px; margin-left: auto; }
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
 
-  /* Hero */
-  .hero { padding: 64px 32px 48px; max-width: 1100px; margin: 0 auto; }
-  .hero h1 { font-size: clamp(24px, 4vw, 40px); font-weight: 800; line-height: 1.2; }
-  .hero h1 span { color: var(--accent); }
-  .hero p { color: var(--muted); margin-top: 12px; font-size: 15px; max-width: 640px; }
-  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-  .badge { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--muted); }
-  .badge.hot { border-color: var(--accent); color: var(--accent); }
+  /* ── Nav ─────────────────────────────── */
+  nav {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    width: 30px; height: 30px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-logo svg { width: 16px; height: 16px; fill: white; }
+  .nav-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; color: var(--text); }
+  .nav-sep { color: var(--border); margin: 0 2px; }
+  .nav-sub { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--muted); }
+  .nav-pill {
+    margin-left: auto;
+    background: var(--cream-mid);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+  }
 
-  /* Stats strip */
-  .stats { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 28px 32px; }
-  .stats-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; }
-  .stat-item { text-align: center; }
-  .stat-item .val { font-size: 28px; font-weight: 800; color: var(--accent); }
-  .stat-item .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .stat-item .caveat { font-size: 10px; color: #64748b; margin-top: 2px; }
+  /* ── Hero ────────────────────────────── */
+  .hero {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 72px 40px 56px;
+  }
+  .hero-eyebrow {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--orange); }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    color: var(--muted);
+  }
+  .badge.accent { border-color: var(--orange); color: var(--orange); background: #fdf5f0; }
 
-  /* Section */
-  section { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
-  h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-  h2 .tag { font-size: 11px; font-weight: 500; background: var(--accent); color: white; border-radius: 4px; padding: 2px 7px; margin-left: 10px; vertical-align: middle; }
-  .section-sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
-  hr.divider { border: none; border-top: 1px solid var(--border); margin: 0 32px; }
+  /* ── Stats strip ─────────────────────── */
+  .stats-strip {
+    background: var(--cream-mid);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 40px;
+  }
+  .stats-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 32px;
+  }
+  .stat { text-align: center; }
+  .stat-val {
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    margin-top: 6px;
+  }
+  .stat-note { font-family: 'Poppins', sans-serif; font-size: 10px; color: var(--subtle); margin-top: 3px; }
 
-  /* Charts grid */
-  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 24px; }
-  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .chart-card img { width: 100%; display: block; background: #fafafa; }
-  .chart-meta { padding: 14px 16px; }
-  .chart-meta .chart-title { font-size: 13px; font-weight: 600; }
-  .chart-meta .chart-insight { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  /* ── Section wrapper ─────────────────── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 56px 40px;
+  }
+  .section + .section { padding-top: 0; }
 
-  /* Full-width chart */
-  .chart-full { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .chart-full img { width: 100%; display: block; background: #fafafa; }
-  .chart-full .chart-meta { padding: 14px 16px; }
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 40px;
+  }
 
-  /* Insight cards */
-  .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-  .insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
-  .insight-card .ic-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-  .insight-card .ic-val { font-size: 20px; font-weight: 700; }
-  .insight-card .ic-desc { font-size: 12px; color: var(--muted); margin-top: 6px; }
-  .insight-card.ok { border-color: #166534; }
-  .insight-card.warn { border-color: #92400e; }
-  .ok .ic-val { color: var(--ok); }
-  .warn .ic-val { color: var(--warn); }
+  .section-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 32px;
+  }
 
-  /* HMW callout */
-  .hmw { background: linear-gradient(135deg, #1a1527, #1a2027); border: 1px solid #3730a3; border-radius: 12px; padding: 28px 32px; margin: 28px 0; }
-  .hmw .hmw-label { font-size: 11px; color: #818cf8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
-  .hmw .hmw-text { font-size: 17px; font-weight: 600; line-height: 1.5; }
-  .hmw .hmw-text span { color: #818cf8; }
+  /* ── Chart cards ─────────────────────── */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+  }
+  .chart-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+  }
+  .chart-card img { width: 100%; display: block; }
+  .chart-caption {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+    background: var(--cream);
+  }
+  .chart-caption strong {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .chart-caption span { font-size: 12px; color: var(--muted); font-style: italic; }
 
-  /* Positioning block */
-  .positioning { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; font-size: 14px; line-height: 1.8; }
-  .positioning strong { color: var(--accent); }
-  .positioning .unlike { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .chart-full {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+  }
+  .chart-full img { width: 100%; display: block; }
+  .chart-full .chart-caption { border-top: 1px solid var(--border); }
 
-  /* Thesis cards */
-  .thesis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-  .thesis-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-  .thesis-card .tc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .thesis-card h3 { font-size: 15px; font-weight: 700; margin: 8px 0 10px; }
-  .thesis-card p { font-size: 13px; color: var(--muted); }
-  .thesis-card .assumption { margin-top: 12px; font-size: 12px; color: var(--warn); border-left: 2px solid var(--warn); padding-left: 10px; }
+  /* ── Callout / HMW ───────────────────── */
+  .callout {
+    border-left: 3px solid var(--orange);
+    background: #fdf5f0;
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 28px 0;
+  }
+  .callout-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange-dk);
+    margin-bottom: 8px;
+  }
+  .callout-text { font-size: 16px; line-height: 1.6; color: var(--text); }
+  .callout-text strong { color: var(--orange-dk); font-style: normal; }
 
-  /* Phase timeline */
-  .phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .phase { padding: 24px; background: var(--surface); }
+  /* ── Pill cards (insights) ───────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .card.ok   { border-top: 3px solid var(--green); }
+  .card.warn { border-top: 3px solid var(--orange); }
+  .card.info { border-top: 3px solid var(--blue); }
+  .card-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .ok   .card-label { color: var(--green); }
+  .warn .card-label { color: var(--orange-dk); }
+  .info .card-label { color: var(--blue); }
+  .card-val {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-desc { font-size: 12px; color: var(--muted); font-style: italic; }
+
+  /* ── Positioning block ───────────────── */
+  .pos-block {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .pos-block .kw { color: var(--orange-dk); font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 13px; }
+  .pos-block .unlike {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Thesis cards ────────────────────── */
+  .thesis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .thesis-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .thesis-letter {
+    width: 32px; height: 32px;
+    background: var(--cream-mid);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .thesis-card h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .thesis-card p { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .thesis-assumption {
+    font-size: 11.5px;
+    color: var(--warn-text);
+    background: var(--warn-bg);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── Phase timeline ──────────────────── */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    margin-bottom: 24px;
+  }
+  .phase { padding: 24px; }
   .phase:not(:last-child) { border-right: 1px solid var(--border); }
-  .phase .ph-days { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .phase .ph-theme { font-size: 16px; font-weight: 700; margin: 8px 0 12px; }
+  .phase-days {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .phase h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
   .phase ul { list-style: none; }
-  .phase ul li { font-size: 13px; color: var(--muted); padding: 4px 0; padding-left: 16px; position: relative; }
-  .phase ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+  .phase ul li {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 4px 0 4px 16px;
+    position: relative;
+    font-style: italic;
+  }
+  .phase ul li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-style: normal;
+    font-size: 11px;
+  }
 
-  /* Competitor table */
-  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .comp-table th { background: #1e2230; color: var(--muted); text-align: left; padding: 10px 14px; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border); }
-  .comp-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  .comp-table tr:last-child td { border-bottom: none; }
-  .comp-table tr:hover td { background: #1e2230; }
-  .comp-name { font-weight: 600; }
-  .comp-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  /* ── Competitor table ────────────────── */
+  .table-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--cream-mid);
+    text-align: left;
+    padding: 11px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--cream); }
+  .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  td strong { font-family: 'Poppins', sans-serif; font-weight: 600; }
+  td em { color: var(--muted); font-size: 12px; }
 
-  /* Risk table */
-  .risk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .risk-table th { background: #1e2230; color: var(--muted); text-align: left; padding: 10px 14px; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border); }
-  .risk-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); }
-  .risk-table tr:last-child td { border-bottom: none; }
-  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-  .pill.high { background: #450a0a; color: #fca5a5; }
-  .pill.med  { background: #451a03; color: #fcd34d; }
-  .pill.low  { background: #052e16; color: #86efac; }
+  /* ── Risk table ──────────────────────── */
+  .pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .pill-high { background: #fde8e8; color: #8b1a1a; }
+  .pill-med  { background: var(--warn-bg); color: var(--warn-text); }
+  .pill-low  { background: var(--ok-bg); color: var(--ok-text); }
 
-  /* Footer */
-  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 32px; text-align: center; color: var(--muted); font-size: 12px; }
-  footer a { color: var(--muted); }
+  /* ── Outcome box ─────────────────────── */
+  .outcome-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .outcome-icon {
+    width: 40px; height: 40px;
+    background: var(--cream-mid);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .outcome-box h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .outcome-box p { font-size: 13px; color: var(--muted); font-style: italic; }
 
-  @media (max-width: 700px) {
+  /* ── Footer ──────────────────────────── */
+  footer {
+    background: var(--cream-mid);
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  footer a { color: var(--orange); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-logo {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .footer-logo svg { width: 18px; height: 18px; fill: white; }
+
+  @media (max-width: 680px) {
     .charts-grid { grid-template-columns: 1fr; }
     .phases { grid-template-columns: 1fr; }
     .phase:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
-    nav .sub { display: none; }
+    .nav-pill { display: none; }
+    .hero { padding: 48px 24px 40px; }
+    .section { padding: 40px 24px; }
+    .stats-strip { padding: 28px 24px; }
+    .section-divider { margin: 0 24px; }
+    nav { padding: 0 24px; }
   }
 </style>
 </head>
 <body>
 
+<!-- Nav -->
 <nav>
-  <div class="logo">A</div>
-  <div class="title">Anthropic — PM, API Growth</div>
-  <div class="sub">Strategic Brief · May 2026</div>
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+  </div>
+  <span class="nav-title">Anthropic</span>
+  <span class="nav-sep">·</span>
+  <span class="nav-sub">PM, API Growth — Strategic Brief</span>
+  <span class="nav-pill">May 2026</span>
 </nav>
 
 <!-- Hero -->
 <div class="hero">
-  <h1>Claude Platform API:<br><span>Full Strategic Brief</span></h1>
-  <p>Interview preparation and strategic positioning for the PM, API Growth role at Anthropic. Six frameworks applied: MITRE Problem Framing · Geoffrey Moore Positioning · OST · Business Health Diagnostic · Acquisition Channel Advisor · Company Research.</p>
-  <div class="badges">
-    <span class="badge hot">$305K–$385K</span>
-    <span class="badge">San Francisco / NY / Seattle</span>
+  <div class="hero-eyebrow">Interview Preparation · Strategic Analysis</div>
+  <h1>Claude Platform API:<br><em>Full Strategic Brief</em></h1>
+  <p class="hero-desc">Six frameworks applied — MITRE Problem Framing · Geoffrey Moore Positioning · Opportunity Solution Tree · Business Health Diagnostic · Acquisition Channel Advisor · Company Research.</p>
+  <div class="badge-row">
+    <span class="badge accent">$305K – $385K</span>
+    <span class="badge">SF · NY · Seattle</span>
     <span class="badge">Acquisition → Activation → Monetization</span>
     <span class="badge">6+ years PM</span>
     <span class="badge">platform.claude.com</span>
   </div>
 </div>
 
-<!-- Stats -->
-<div class="stats">
+<!-- Stats strip -->
+<div class="stats-strip">
   <div class="stats-inner">
-    <div class="stat-item">
-      <div class="val">$30B</div>
-      <div class="lbl">ARR (April 2026)</div>
-      <div class="caveat">~$8B disputed gross vs. net</div>
+    <div class="stat">
+      <div class="stat-val">$30B</div>
+      <div class="stat-label">ARR (April 2026)</div>
+      <div class="stat-note">~$8B gross vs. net dispute</div>
     </div>
-    <div class="stat-item">
-      <div class="val">70×</div>
-      <div class="lbl">API Volume YoY</div>
-      <div class="caveat">Fastest-growing infra layer</div>
+    <div class="stat">
+      <div class="stat-val">70×</div>
+      <div class="stat-label">API Volume YoY</div>
+      <div class="stat-note">Fastest-growing infra layer</div>
     </div>
-    <div class="stat-item">
-      <div class="val">500+</div>
-      <div class="lbl">$1M+ ARR Accounts</div>
-      <div class="caveat">Up from 12 one year ago</div>
+    <div class="stat">
+      <div class="stat-val">500+</div>
+      <div class="stat-label">$1M+ ARR Accounts</div>
+      <div class="stat-note">Up from 12 one year ago</div>
     </div>
-    <div class="stat-item">
-      <div class="val">$2.5B</div>
-      <div class="lbl">Claude Code Run-rate</div>
-      <div class="caveat">4× business subs since Jan 2026</div>
+    <div class="stat">
+      <div class="stat-val">$2.5B</div>
+      <div class="stat-label">Claude Code Run-rate</div>
+      <div class="stat-note">4× business subs since Jan 2026</div>
     </div>
-    <div class="stat-item">
-      <div class="val">20h</div>
-      <div class="lbl">Avg Dev Engagement/Week</div>
-      <div class="caveat">Highest activation signal in portfolio</div>
+    <div class="stat">
+      <div class="stat-val">20h</div>
+      <div class="stat-label">Dev Engagement / Week</div>
+      <div class="stat-note">Highest activation signal</div>
     </div>
-    <div class="stat-item">
-      <div class="val">$380B</div>
-      <div class="lbl">Post-money Valuation</div>
-      <div class="caveat">Series G, March 2026</div>
+    <div class="stat">
+      <div class="stat-val">$380B</div>
+      <div class="stat-label">Post-money Valuation</div>
+      <div class="stat-note">Series G, March 2026</div>
     </div>
   </div>
 </div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: Health + Growth signals -->
-<section>
-  <h2>Business Health & Growth Signals <span class="tag">Section 1 + 4</span></h2>
-  <p class="section-sub">Company Research + Business Health Diagnostic — 4 dimensions across Growth, Retention, Unit Economics, Capital Efficiency.</p>
+<!-- Section 1: Health + Growth -->
+<div class="section">
+  <div class="section-label">Section 1 + 4 — Company Research · Business Health</div>
+  <h2>Growth Signals & Business Health</h2>
+  <p class="section-sub">4-dimension SaaS diagnostic across Growth, Retention, Unit Economics, Capital Efficiency.</p>
   <div class="charts-grid">
     <div class="chart-card">
       <img src="chart1_arr_comparison.png" alt="ARR Comparison">
-      <div class="chart-meta">
-        <div class="chart-title">ARR: Anthropic vs OpenAI</div>
-        <div class="chart-insight">Anthropic leads on gross-reported ARR. OpenAI disputes ~$8B on revenue recognition grounds — underlying growth is not in dispute.</div>
+      <div class="chart-caption">
+        <strong>ARR: Anthropic vs OpenAI</strong>
+        <span>Anthropic leads on gross-reported ARR. OpenAI disputes ~$8B on revenue recognition. Underlying growth trajectory is not in dispute.</span>
       </div>
     </div>
     <div class="chart-card">
       <img src="chart9_growth_signals.png" alt="Growth Signals">
-      <div class="chart-meta">
-        <div class="chart-title">Key Growth Signals</div>
-        <div class="chart-insight">$1M+ accounts grew 41× in 15 months. Claude Code business subscriptions 4× since Jan 2026. Developer engagement at 20h/week — an order of magnitude above industry average.</div>
+      <div class="chart-caption">
+        <strong>Key Growth Signals</strong>
+        <span>$1M+ accounts grew 41× in 15 months. Claude Code business subs 4× since Jan 2026. Developer engagement at 20h/week.</span>
       </div>
     </div>
     <div class="chart-card">
       <img src="chart6_health_scorecard.png" alt="Health Scorecard">
-      <div class="chart-meta">
-        <div class="chart-title">Business Health Scorecard</div>
-        <div class="chart-insight">Overall verdict: Strong Growth, Underbuilt Self-Serve. Fix the funnel — the economics are already good.</div>
+      <div class="chart-caption">
+        <strong>Business Health Scorecard</strong>
+        <span>Overall verdict: Strong Growth, Underbuilt Self-Serve. Fix the funnel — the economics are already good.</span>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: Problem Framing -->
-<section>
-  <h2>Problem Framing Canvas <span class="tag">Section 2</span></h2>
-  <p class="section-sub">MITRE v3 — Look Inward → Look Outward → Reframe. Bias-resistant problem statement before any solutions.</p>
+<!-- Section 2: Problem Framing -->
+<div class="section">
+  <div class="section-label">Section 2 — MITRE Problem Framing Canvas v3</div>
+  <h2>Problem Framing</h2>
+  <p class="section-sub">Look Inward → Look Outward → Reframe. Bias-resistant problem statement before any solutions.</p>
 
-  <div class="insight-grid" style="margin-bottom: 24px;">
-    <div class="insight-card warn">
-      <div class="ic-label">Core Assumption to Challenge</div>
-      <div class="ic-val" style="font-size:15px;">Bottleneck is acquisition</div>
-      <div class="ic-desc">It may actually be activation — developers who sign up but never make a second API call.</div>
+  <div class="cards-grid">
+    <div class="card warn">
+      <div class="card-label">Core Assumption to Challenge</div>
+      <div class="card-val">Bottleneck is acquisition</div>
+      <div class="card-desc">May actually be activation — developers who sign up but never make a second API call.</div>
     </div>
-    <div class="insight-card warn">
-      <div class="ic-label">Who's Been Left Out</div>
-      <div class="ic-val" style="font-size:15px;">Evaluators, not just builders</div>
-      <div class="ic-desc">Console optimized for developers who've decided to build — not developers still comparing Claude vs. GPT.</div>
+    <div class="card warn">
+      <div class="card-label">Who's Been Left Out</div>
+      <div class="card-val">Evaluators, not builders</div>
+      <div class="card-desc">Console optimized for developers who've decided to build — not those still comparing Claude vs. GPT.</div>
     </div>
-    <div class="insight-card warn">
-      <div class="ic-label">Hidden Competitor</div>
-      <div class="ic-val" style="font-size:15px;">Meta Llama (free)</div>
-      <div class="ic-desc">Cost-sensitive developers compare Claude to $0 self-hosted Llama, not $X/M OpenAI tokens.</div>
+    <div class="card warn">
+      <div class="card-label">Hidden Competitor</div>
+      <div class="card-val">Meta Llama ($0)</div>
+      <div class="card-desc">Cost-sensitive devs compare Claude to free self-hosted Llama, not $X/M OpenAI tokens.</div>
     </div>
-    <div class="insight-card ok">
-      <div class="ic-label">Analog That Solved This</div>
-      <div class="ic-val" style="font-size:15px;">Stripe, Twilio, Vercel</div>
-      <div class="ic-desc">All won on activation speed, not marketing spend. "7 lines of code" > any ad campaign.</div>
+    <div class="card ok">
+      <div class="card-label">Analogs That Solved This</div>
+      <div class="card-val">Stripe · Twilio · Vercel</div>
+      <div class="card-desc">All won on activation speed, not marketing spend. "7 lines of code" beats any ad campaign.</div>
     </div>
   </div>
 
-  <div class="hmw">
-    <div class="hmw-label">How Might We Statement</div>
-    <div class="hmw-text"><span>How might we</span> help any developer — regardless of technical level, geography, or prior AI experience — reach their first working Claude integration <span>in under 3 minutes</span>, so they can experience the quality and safety difference before choosing a competitor?</div>
+  <div class="callout">
+    <div class="callout-label">How Might We Statement</div>
+    <div class="callout-text">
+      <strong>How might we</strong> help any developer — regardless of technical level, geography, or prior AI experience — reach their first working Claude integration <strong>in under 3 minutes</strong>, so they can experience the quality and safety difference before choosing a competitor?
+    </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: Positioning -->
-<section>
-  <h2>Positioning Statement <span class="tag">Section 3</span></h2>
-  <p class="section-sub">Geoffrey Moore, Crossing the Chasm — not a tagline, a strategic clarity tool.</p>
-  <div class="positioning">
-    <div><strong>For</strong> independent developers, startup engineering teams, and regulated-industry architects</div>
-    <div><strong>that need</strong> to build AI-powered applications that users and enterprises can trust — without treating safety as a separate compliance layer,</div>
-    <div style="margin-top:8px;"><strong>Claude Platform</strong> is a frontier AI API</div>
-    <div><strong>that</strong> delivers state-of-the-art reasoning, 200K token context, and Constitutional AI safety properties your applications inherit by design — making regulated-industry deployment possible without additional compliance overhead.</div>
+<!-- Section 3: Positioning -->
+<div class="section">
+  <div class="section-label">Section 3 — Geoffrey Moore, Crossing the Chasm</div>
+  <h2>Positioning Statement</h2>
+  <p class="section-sub">Not a tagline — a strategic clarity tool that forces hard choices on target, need, and differentiation.</p>
+  <div class="pos-block">
+    <div><span class="kw">For</span> independent developers, startup engineering teams, and regulated-industry architects</div>
+    <div><span class="kw">that need</span> to build AI-powered applications that users and enterprises can trust — without treating safety as a separate compliance layer,</div>
+    <div style="margin-top:10px;"><span class="kw">Claude Platform</span> is a frontier AI API</div>
+    <div><span class="kw">that</span> delivers state-of-the-art reasoning, 200K token context, and Constitutional AI safety properties your applications inherit by design — making regulated-industry deployment possible without additional compliance overhead.</div>
     <div class="unlike">
-      <strong>Unlike</strong> OpenAI's API,<br>
-      <strong>Claude Platform provides</strong> verifiable safety-by-architecture — meaning applications inherit Constitutional AI properties that pass enterprise procurement reviews, financial services audits, and healthcare compliance checks without requiring custom safety guardrails.
+      <span class="kw">Unlike</span> OpenAI's API,<br>
+      <span class="kw">Claude Platform provides</span> verifiable safety-by-architecture — meaning applications inherit Constitutional AI properties that pass enterprise procurement reviews, financial services audits, and healthcare compliance checks without requiring custom safety guardrails.
     </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: Channels + RICE -->
-<section>
-  <h2>Acquisition Channel Analysis <span class="tag">Section 5</span></h2>
-  <p class="section-sub">CAC · LTV · Payback · RICE scoring across all known and hypothesized API acquisition channels.</p>
+<!-- Section 5: Channels -->
+<div class="section">
+  <div class="section-label">Section 5 — Acquisition Channel Advisor</div>
+  <h2>Acquisition Channels & RICE Scores</h2>
+  <p class="section-sub">CAC · LTV · Payback across all known API acquisition channels. Estimates directional — baseline in Days 1–30.</p>
   <div class="charts-grid">
     <div class="chart-card">
       <img src="chart3_rice_scores.png" alt="RICE Scores">
-      <div class="chart-meta">
-        <div class="chart-title">Channel & Experiment RICE Scores</div>
-        <div class="chart-insight">Docs runnable samples (52,500) and E1 in-console quickstart lead. Claude Code → API on-ramp is highest quality but requires Week 1 assumption validation before building.</div>
+      <div class="chart-caption">
+        <strong>Channel & Experiment RICE Scores</strong>
+        <span>Docs runnable samples (52,500) leads all channels. Claude Code → API on-ramp is highest quality but needs Week 1 assumption validation before build.</span>
       </div>
     </div>
     <div class="chart-card">
       <img src="chart2_developer_scale.png" alt="Developer Scale">
-      <div class="chart-meta">
-        <div class="chart-title">Developer Community Scale</div>
-        <div class="chart-insight">OpenAI's 4M developer head start compounds through network effects. Anthropic's advantage is intensity per developer (20h/week), not breadth.</div>
+      <div class="chart-caption">
+        <strong>Developer Community Scale</strong>
+        <span>OpenAI's 4M developer head start compounds via network effects. Anthropic's advantage is intensity per developer (20h/week), not breadth.</span>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: OST -->
-<section>
-  <h2>Opportunity Solution Tree <span class="tag">Section 6</span></h2>
-  <p class="section-sub">Teresa Torres, Continuous Discovery Habits — Outcome → Opportunities → Solutions → Assumption Tests.</p>
+<!-- Section 6: OST -->
+<div class="section">
+  <div class="section-label">Section 6 — Teresa Torres, Continuous Discovery Habits</div>
+  <h2>Opportunity Solution Tree</h2>
+  <p class="section-sub">Outcome → Opportunities → Solutions → Assumption Tests. The tree ends at tests, not solutions.</p>
 
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:24px;">
-    <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Desired Outcome</div>
-    <div style="font-size:16px;font-weight:700;">Increase API Platform Activation Rate</div>
-    <div style="font-size:13px;color:var(--muted);margin-top:4px;">% of new signups making their first successful API call within 24 hours of account creation. Top-quartile PLG benchmark: >50% within 24h.</div>
+  <div class="outcome-box">
+    <div class="outcome-icon">◎</div>
+    <div>
+      <h3>Desired Outcome: Increase API Platform Activation Rate</h3>
+      <p>% of new signups making their first successful API call within 24 hours. Top-quartile PLG benchmark: &gt;50% within 24h. 10pp improvement at 10K signups/month = 1,000 additional activated developers on a compounding usage curve.</p>
+    </div>
   </div>
 
   <div class="chart-card" style="margin-bottom:24px;">
     <img src="chart4_ost_scores.png" alt="OST POC Scores">
-    <div class="chart-meta">
-      <div class="chart-title">Recommended POC Scoring</div>
-      <div class="chart-insight">B1 contextual upgrade modal scores highest (14/15). A1 in-console quickstart 13/15. C1 requires validating whether >80% of Claude Code users are already API users before any build.</div>
+    <div class="chart-caption">
+      <strong>Recommended POC Scoring (Feasibility · Impact · Market Fit)</strong>
+      <span>B1 contextual upgrade modal scores highest (14/15). A1 in-console quickstart 13/15. C1 requires assumption validation: what % of Claude Code users are already API users?</span>
     </div>
   </div>
 
-  <div class="insight-grid">
-    <div class="insight-card">
-      <div class="ic-label">Opportunity A · POC: A1</div>
-      <div class="ic-val" style="font-size:16px;">In-console Quickstart</div>
-      <div class="ic-desc">"Run this code" button with pre-loaded working API call. Score 13/15. Build 2 weeks → dogfood → A/B at 20% signups.</div>
+  <div class="cards-grid">
+    <div class="card info">
+      <div class="card-label">Opportunity A · POC: A1</div>
+      <div class="card-val">In-console Interactive Quickstart</div>
+      <div class="card-desc">Score 13/15. "Run this code" button with pre-loaded working API call. 2 weeks → dogfood → A/B at 20% signups.</div>
     </div>
-    <div class="insight-card ok">
-      <div class="ic-label">Opportunity B · POC: B1 (Top Score)</div>
-      <div class="ic-val" style="font-size:16px;">Contextual Upgrade Modal</div>
-      <div class="ic-desc">Upgrade CTA at rate/token limit hit moment. Score 14/15. Hypothesis: +20% free→paid conversion vs. billing-page-only.</div>
+    <div class="card ok">
+      <div class="card-label">Opportunity B · POC: B1 — Top Score</div>
+      <div class="card-val">Contextual Upgrade Modal</div>
+      <div class="card-desc">Score 14/15. Upgrade CTA at rate/token limit hit. Hypothesis: +20% free→paid conversion vs. billing-page only.</div>
     </div>
-    <div class="insight-card warn">
-      <div class="ic-label">Opportunity C · Validate First</div>
-      <div class="ic-val" style="font-size:16px;">Claude Code → API Path</div>
-      <div class="ic-desc">Instrument conversion funnel in Week 1. If >80% already converted → redirect effort. If &lt;40% → build C1 authenticated on-ramp.</div>
+    <div class="card warn">
+      <div class="card-label">Opportunity C · Validate First</div>
+      <div class="card-val">Claude Code → API Path</div>
+      <div class="card-desc">Instrument in Week 1. If &gt;80% already converted → redirect effort. If &lt;40% → build C1 authenticated on-ramp.</div>
     </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: Competitors -->
-<section>
-  <h2>Competitive Analysis <span class="tag">Section 7</span></h2>
+<!-- Section 7: Competitors -->
+<div class="section">
+  <div class="section-label">Section 7 — Competitive Analysis</div>
+  <h2>Competitive Landscape</h2>
   <p class="section-sub">Top 5 competitors + Meta Llama open-source floor. May 2026 data.</p>
-  <div class="chart-card" style="margin-bottom:24px;">
-    <img src="chart5_competitor_matrix.png" alt="Competitor Positioning Matrix">
-    <div class="chart-meta">
-      <div class="chart-title">Price vs. Safety Architecture Depth</div>
-      <div class="chart-insight">Anthropic holds the top-right corner alone — frontier quality + verifiable safety architecture. No other closed-model provider can replicate Constitutional AI quickly.</div>
+
+  <div class="chart-full" style="margin-bottom:24px;">
+    <img src="chart5_competitor_matrix.png" alt="Competitor Matrix">
+    <div class="chart-caption">
+      <strong>Price vs. Safety Architecture Depth</strong>
+      <span>Anthropic holds the top-right corner alone. No other closed-model provider can replicate Constitutional AI quickly.</span>
     </div>
   </div>
 
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
-    <table class="comp-table">
+  <div class="table-wrap">
+    <table>
       <thead>
         <tr>
           <th>Competitor</th>
-          <th>Developer Scale</th>
+          <th>Scale</th>
           <th>Primary Moat</th>
-          <th>Pricing Signal</th>
+          <th>Pricing</th>
           <th>Gap Anthropic Can Exploit</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><span class="comp-dot" style="background:#10A37F"></span><span class="comp-name">OpenAI</span></td>
+          <td><span class="dot" style="background:#10A37F"></span><strong>OpenAI</strong></td>
           <td>~4M developers</td>
-          <td>First-mover, GPT brand, Responses API</td>
+          <td>First-mover, GPT brand</td>
           <td>Premium</td>
-          <td>Safety is marketing-thin; regulated-industry liability</td>
+          <td><em>Safety is marketing-thin; regulated-industry liability</em></td>
         </tr>
         <tr>
-          <td><span class="comp-dot" style="background:#4285F4"></span><span class="comp-name">Google Gemini</span></td>
+          <td><span class="dot" style="background:#4285F4"></span><strong>Google Gemini</strong></td>
           <td>~2.4M (+118% YoY)</td>
-          <td>Ecosystem embed + aggressive pricing</td>
-          <td>$2/M input — ~1/7.5× Claude Opus 4.6</td>
-          <td>Developer trust issues; rapid rebranding; data privacy concerns</td>
+          <td>Ecosystem embed + price</td>
+          <td>$2/M — ~1/7.5× Claude Opus</td>
+          <td><em>Developer trust issues; data privacy concerns</em></td>
         </tr>
         <tr>
-          <td><span class="comp-dot" style="background:#0078D4"></span><span class="comp-name">Microsoft Azure AI</span></td>
-          <td>70% Fortune 1000; GitHub 145M devs</td>
-          <td>Enterprise incumbency, GitHub Copilot flywheel</td>
+          <td><span class="dot" style="background:#0078D4"></span><strong>Microsoft Azure</strong></td>
+          <td>70% Fortune 1000</td>
+          <td>Enterprise incumbency, GitHub Copilot (145M)</td>
           <td>Enterprise EA</td>
-          <td>No proprietary frontier model; optimized for IT buyers not developers</td>
+          <td><em>No proprietary frontier model; IT-buyer focused, not developer-first</em></td>
         </tr>
         <tr>
-          <td><span class="comp-dot" style="background:#FF9900"></span><span class="comp-name">AWS Bedrock</span></td>
-          <td>100K+ organizations</td>
-          <td>Model-agnostic infra, OpenAI-compat layer</td>
+          <td><span class="dot" style="background:#FF9900"></span><strong>AWS Bedrock</strong></td>
+          <td>100K+ orgs</td>
+          <td>Model-agnostic infra</td>
           <td>Usage-based</td>
-          <td>Claude-specific use cases require direct API; model-agnostic = no safety story</td>
+          <td><em>Claude-specific use cases require direct API; no safety story</em></td>
         </tr>
         <tr>
-          <td><span class="comp-dot" style="background:#8B5CF6"></span><span class="comp-name">Cohere</span></td>
+          <td><span class="dot" style="background:#8B5CF6"></span><strong>Cohere</strong></td>
           <td>~17K enterprises</td>
-          <td>Sovereign/multilingual AI, pure B2B</td>
+          <td>Sovereign / multilingual AI</td>
           <td>Enterprise contract</td>
-          <td>Wins procurement but not developer love; model quality below frontier</td>
+          <td><em>Wins procurement, not developer love; model quality below frontier</em></td>
         </tr>
         <tr>
-          <td><span class="comp-dot" style="background:#1877F2"></span><span class="comp-name">Meta Llama (floor)</span></td>
+          <td><span class="dot" style="background:#1877F2"></span><strong>Meta Llama (floor)</strong></td>
           <td>1.2B+ downloads</td>
-          <td>Free open weights — sets pricing floor</td>
-          <td>$0 (self-hosted)</td>
-          <td>Can't compete on price — must win on safety, SLA, compliance, workflow</td>
+          <td>Free open weights</td>
+          <td>$0 self-hosted</td>
+          <td><em>Can't compete on price — must win on safety, SLA, compliance</em></td>
         </tr>
       </tbody>
     </table>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: Positioning + Thesis -->
-<section>
-  <h2>Platform Thesis Candidates <span class="tag">Section 8</span></h2>
+<!-- Section 8: Thesis -->
+<div class="section">
+  <div class="section-label">Section 8 — 30-60-90 Day Plan</div>
+  <h2>Platform Thesis Candidates</h2>
   <p class="section-sub">Select one by Day 30. Experiments validate the thesis — they don't originate it.</p>
   <div class="thesis-grid">
     <div class="thesis-card">
-      <div class="tc-label">Thesis A</div>
+      <div class="thesis-letter">A</div>
       <h3>MCP Ecosystem as Distribution Moat</h3>
-      <p>Anthropic invented MCP. Position platform.claude.com as the canonical place to discover, publish, and monetize MCP servers. Developers who publish extensions develop increasing switching costs.</p>
-      <div class="assumption">Key assumption: Developers are building MCP servers without a canonical marketplace. Validate: informal directories, GitHub repos, community lists that pre-date official Marketplace.</div>
+      <p>Anthropic invented MCP. Position platform.claude.com as the canonical place to discover, publish, and monetize MCP servers. Developers who publish extensions compound switching costs.</p>
+      <div class="thesis-assumption">Assumption: Developers are building MCP servers without a canonical marketplace. Validate via informal GitHub directories and community lists.</div>
     </div>
     <div class="thesis-card">
-      <div class="tc-label">Thesis B</div>
+      <div class="thesis-letter">B</div>
       <h3>Enterprise Self-Serve Expansion ($10K → $1M ARR)</h3>
-      <p>$1M+ ARR accounts scaled 12 → 500+. Biggest unlock is expansion — removing the sales rep at the $50K–$200K tier via usage dashboards, team management, SSO, RBAC, and audit logs.</p>
-      <div class="assumption">Key assumption: $10K–$100K accounts stall due to missing tooling, not pricing or performance. Validate: interview 10 accounts in this tier about expansion blockers.</div>
+      <p>$1M+ ARR accounts scaled 12 → 500+. Biggest unlock is expansion — removing the sales rep at the $50K–$200K tier via usage dashboards, SSO, RBAC, and audit logs.</p>
+      <div class="thesis-assumption">Assumption: Accounts stall due to missing tooling, not pricing. Validate: interview 10 accounts in this tier about their expansion blockers.</div>
     </div>
     <div class="thesis-card">
-      <div class="tc-label">Thesis C</div>
+      <div class="thesis-letter">C</div>
       <h3>Safety as a Paid Growth Feature for Regulated Verticals</h3>
-      <p>Finance, healthcare, and government are underserved by OpenAI and Google. Constitutional AI is real differentiation — but platform tooling (audit logs, data residency, RBAC) doesn't yet match the safety story.</p>
-      <div class="assumption">Key assumption: Regulated-industry developers are blocked by missing platform controls, not procurement complexity. Validate: do they cite product gaps or process gaps as primary barrier?</div>
+      <p>Finance, healthcare, and government are underserved by OpenAI and Google. Constitutional AI is real differentiation — but platform tooling doesn't yet match the safety story.</p>
+      <div class="thesis-assumption">Assumption: Regulated-industry devs are blocked by missing platform controls, not procurement complexity. Validate: product gaps vs. process gaps.</div>
     </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: 30-60-90 -->
-<section>
-  <h2>30-60-90 Day Landing Plan <span class="tag">Section 8</span></h2>
-  <p class="section-sub">Grounded in Anthropic's PM culture: Product Notes not PRDs · 45-min prototype cycles · dogfood-first · no 12-month roadmaps.</p>
+<!-- Section 8b: Timeline -->
+<div class="section">
+  <div class="section-label">Section 8 — Landing Plan Execution</div>
+  <h2>30-60-90 Day Timeline</h2>
+  <p class="section-sub">Anthropic PM culture: Product Notes not PRDs · 45-min prototype cycles · dogfood-first · no 12-month roadmaps.</p>
 
-  <div class="phases" style="margin-bottom:28px;">
+  <div class="phases">
     <div class="phase">
-      <div class="ph-days">Days 1–30</div>
-      <div class="ph-theme">Listen & Map</div>
+      <div class="phase-days">Days 1–30</div>
+      <h3>Listen & Map</h3>
       <ul>
         <li>Shadow DevRel, Eng, Billing, DS — one day each</li>
-        <li>Live funnel dashboard: TTFAC, D7, paid conversion</li>
+        <li>Build live funnel dashboard: TTFAC, D7, paid conversion</li>
         <li>12 developer interviews across 4 segments</li>
         <li>Session replay audit — 20 onboarding sessions</li>
-        <li>Do competitor onboarding yourself (OpenAI, Gemini, Bedrock)</li>
-        <li>Select platform thesis (A, B, or C) by Day 30</li>
+        <li>Do competitor onboarding yourself</li>
+        <li>Select platform thesis by Day 30</li>
       </ul>
     </div>
     <div class="phase">
-      <div class="ph-days">Days 31–60</div>
-      <div class="ph-theme">Experiment</div>
+      <div class="phase-days">Days 31–60</div>
+      <h3>Experiment</h3>
       <ul>
-        <li>E1: In-console quickstart — A/B at 20% signups (RICE 52,500)</li>
-        <li>E2: Contextual upgrade modal at limit surfaces (RICE 14,625)</li>
-        <li>E3: Claude Code → API path — validate assumption first (RICE 15,000)</li>
-        <li>Kill review at Week 3: stop no-signal experiments</li>
+        <li>E1: In-console quickstart A/B — RICE 52,500</li>
+        <li>E2: Contextual upgrade modal — RICE 14,625</li>
+        <li>E3: Claude Code → API path — RICE 15,000</li>
+        <li>Kill review at Week 3 — stop no-signal tests</li>
         <li>First KPI review with Eng, DevRel, Finance</li>
       </ul>
     </div>
     <div class="phase">
-      <div class="ph-days">Days 61–90</div>
-      <div class="ph-theme">Execute & Publish</div>
+      <div class="phase-days">Days 61–90</div>
+      <h3>Execute & Publish</h3>
       <ul>
         <li>Full rollout of winning experiments</li>
-        <li>Kill losing experiments — document learnings</li>
+        <li>Kill losers — document learnings</li>
         <li>KPI dashboard: Day 0 vs Day 90 delta</li>
-        <li>Platform thesis published to leadership</li>
-        <li>Q2 experiment roadmap drafted (themes, not features)</li>
+        <li>Platform thesis presented to leadership</li>
+        <li>Q2 experiment roadmap drafted</li>
       </ul>
     </div>
   </div>
 
   <div class="chart-full">
-    <img src="chart10_gantt.png" alt="30-60-90 Gantt">
-    <div class="chart-meta">
-      <div class="chart-title">Task Timeline</div>
-      <div class="chart-insight">Thesis is selected in Week 4 (Day 25–30) based on research. Experiments validate the thesis in Days 31–60. Kill review at Day 52 stops no-signal work early.</div>
+    <img src="chart10_gantt.png" alt="Gantt Chart">
+    <div class="chart-caption">
+      <strong>Task Timeline</strong>
+      <span>Thesis selected in Week 4 based on research. Experiments validate it in Days 31–60. Kill review at Day 52 stops no-signal work early.</span>
     </div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<hr class="section-divider">
 
-<!-- Section: KPI + Risk -->
-<section>
-  <h2>KPIs & Risk Register <span class="tag">Section 8</span></h2>
-  <p class="section-sub">Measurement timing matters: D30 retention only interpretable for cohorts from Days 1–60 within this plan.</p>
-  <div class="charts-grid">
+<!-- Section 8c: KPI + Risk -->
+<div class="section">
+  <div class="section-label">Section 8 — KPIs & Risk Register</div>
+  <h2>KPIs & Risk</h2>
+  <p class="section-sub">D30 retention only measurable for cohorts from Days 1–60. E3 requires Week 1 instrumentation as prerequisite.</p>
+
+  <div class="charts-grid" style="margin-bottom:24px;">
     <div class="chart-card">
       <img src="chart8_kpi_framework.png" alt="KPI Framework">
-      <div class="chart-meta">
-        <div class="chart-title">KPI Targets by Phase</div>
-        <div class="chart-insight">E3 requires Week 1 instrumentation as prerequisite. Free→paid conversion baseline must be set before any experiment claims improvement.</div>
+      <div class="chart-caption">
+        <strong>KPI Targets by Phase</strong>
+        <span>Free→paid conversion baseline must be set before any experiment claims improvement.</span>
       </div>
     </div>
     <div class="chart-card">
       <img src="chart7_risk_matrix.png" alt="Risk Matrix">
-      <div class="chart-meta">
-        <div class="chart-title">Risk Matrix</div>
-        <div class="chart-insight">Top-right cluster (act now): Engineering capacity + Meta Llama free tier + model releases invalidating mid-experiment assumptions. All three are High/High.</div>
+      <div class="chart-caption">
+        <strong>Risk Matrix</strong>
+        <span>Top-right cluster (act now): Eng capacity + Meta Llama free tier + model releases invalidating mid-experiment assumptions.</span>
       </div>
     </div>
   </div>
 
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:24px;">
-    <table class="risk-table">
+  <div class="table-wrap">
+    <table>
       <thead>
         <tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr>
       </thead>
       <tbody>
-        <tr><td>Model releases invalidate mid-experiment assumptions</td><td><span class="pill high">High</span></td><td><span class="pill med">Med</span></td><td>Design experiments model-agnostically; avoid compensating for current model limitations</td></tr>
-        <tr><td>Engineering capacity consumed by model infrastructure</td><td><span class="pill high">High</span></td><td><span class="pill high">High</span></td><td>Ship UI-only wins first — no backend — to build PM credibility before requesting eng allocation</td></tr>
-        <tr><td>Meta Llama 5 (free, frontier-class) pulls cost-sensitive developers</td><td><span class="pill high">High</span></td><td><span class="pill high">High</span></td><td>Target regulated verticals where free open-source is not a viable option</td></tr>
-        <tr><td>Google's $2/M token pricing creates permanent price pressure</td><td><span class="pill med">Med</span></td><td><span class="pill high">High</span></td><td>Compete on safety posture, model quality ceiling, and MCP/Conway ecosystem — not price</td></tr>
-        <tr><td>Claude Code → API assumption invalidated (>80% already converted)</td><td><span class="pill med">Med</span></td><td><span class="pill med">Med</span></td><td>Validate in Week 1 before building; redirect to expansion if true</td></tr>
-        <tr><td>Enterprise self-serve blocked by procurement, not product</td><td><span class="pill med">Med</span></td><td><span class="pill high">High</span></td><td>Interview Thesis B accounts in Week 2; if procurement is the block, shift thesis to A or C</td></tr>
+        <tr>
+          <td>Model releases invalidate mid-experiment assumptions</td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><em>Design experiments model-agnostically</em></td>
+        </tr>
+        <tr>
+          <td>Eng capacity consumed by model infrastructure</td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Ship UI-only wins first to build PM credibility before requesting eng allocation</em></td>
+        </tr>
+        <tr>
+          <td>Meta Llama 5 (free, frontier-class) pulls cost-sensitive developers</td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Target regulated verticals where free open-source is not viable</em></td>
+        </tr>
+        <tr>
+          <td>Google's $2/M token pricing creates permanent price pressure</td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Compete on safety posture and MCP/Conway ecosystem — not price</em></td>
+        </tr>
+        <tr>
+          <td>Claude Code → API assumption invalid (&gt;80% already converted)</td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><em>Validate in Week 1 before building; redirect to expansion if true</em></td>
+        </tr>
+        <tr>
+          <td>Enterprise self-serve blocked by procurement, not product</td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Interview Thesis B accounts in Week 2; shift thesis if procurement is the block</em></td>
+        </tr>
       </tbody>
     </table>
   </div>
-</section>
+</div>
 
+<!-- Footer -->
 <footer>
-  <p>Anthropic PM, API Growth — Strategic Brief · May 2026 · Frameworks: MITRE Problem Framing Canvas · Geoffrey Moore Positioning · Teresa Torres OST · Business Health Diagnostic · Acquisition Channel Advisor · Company Research</p>
-  <p style="margin-top:6px;"><a href="https://github.com/rhythmfromwithin/antropic">github.com/rhythmfromwithin/antropic</a></p>
+  <div class="footer-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+  </div>
+  <p>Anthropic — PM, API Growth · Strategic Brief · May 2026</p>
+  <p>Frameworks: MITRE Problem Framing Canvas · Geoffrey Moore Positioning · Teresa Torres OST · Business Health Diagnostic · Acquisition Channel Advisor · Company Research</p>
+  <p style="margin-top:8px;"><a href="https://github.com/rhythmfromwithin/antropic">github.com/rhythmfromwithin/antropic</a></p>
 </footer>
 
 </body>
