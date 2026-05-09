@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthropic — PM, API Growth: Interview Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:      #faf9f5;
+    --cream-mid:  #eeece2;
+    --cream-dark: #e0ddd3;
+    --border:     #e8e6dc;
+    --text:       #3d3929;
+    --muted:      #7c7a6e;
+    --subtle:     #b0aea5;
+    --orange:     #d97757;
+    --orange-dk:  #bd5d3a;
+    --blue:       #6a9bcc;
+    --green:      #788c5d;
+    --ok-bg:      #f0f4e8;
+    --ok-text:    #3d5224;
+    --warn-bg:    #fdf3e8;
+    --warn-text:  #7a4010;
+    --info-bg:    #edf4fb;
+    --info-text:  #1e4a72;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── Nav ─────────────────────────────── */
+  nav {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    width: 30px; height: 30px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-logo svg { width: 16px; height: 16px; fill: white; }
+  .nav-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px; color: var(--text); }
+  .nav-sep { color: var(--border); margin: 0 2px; }
+  .nav-sub { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--muted); }
+  .nav-pill {
+    margin-left: auto;
+    background: var(--cream-mid);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  /* ── Page header ──────────────────────── */
+  .page-header {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 52px 40px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-header .eyebrow {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .page-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .page-header h1 em { font-style: normal; color: var(--orange); }
+  .page-header p {
+    font-size: 15px;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 580px;
+  }
+
+  /* ── Section wrapper ─────────────────── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 52px 40px;
+  }
+  .section + .section { padding-top: 0; }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 40px;
+  }
+
+  .section-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+
+  /* ── Chart cards ─────────────────────── */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .chart-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: white;
+  }
+  .chart-card img {
+    width: 100%;
+    display: block;
+    border-radius: 12px 12px 0 0;
+  }
+  .chart-caption {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+    background: var(--cream);
+    border-radius: 0 0 12px 12px;
+  }
+  .chart-caption strong {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .chart-caption span { font-size: 12px; color: var(--muted); font-style: italic; }
+
+  /* ── Callout / HMW ───────────────────── */
+  .callout {
+    border-left: 3px solid var(--orange);
+    background: #fdf5f0;
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 28px 0 0;
+  }
+  .callout-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange-dk);
+    margin-bottom: 8px;
+  }
+  .callout-text { font-size: 16px; line-height: 1.6; color: var(--text); }
+  .callout-text strong { color: var(--orange-dk); font-style: normal; }
+
+  /* ── Pill cards (insights) ───────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .card.ok   { border-top: 3px solid var(--green); }
+  .card.warn { border-top: 3px solid var(--orange); }
+  .card.info { border-top: 3px solid var(--blue); }
+  .card-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .ok   .card-label { color: var(--green); }
+  .warn .card-label { color: var(--orange-dk); }
+  .info .card-label { color: var(--blue); }
+  .card-val {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-desc { font-size: 12px; color: var(--muted); font-style: italic; }
+
+  /* ── Positioning block ───────────────── */
+  .pos-block {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .pos-block .kw { color: var(--orange-dk); font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 13px; }
+  .pos-block .unlike {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Outcome box ─────────────────────── */
+  .outcome-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .outcome-icon {
+    width: 40px; height: 40px;
+    background: var(--cream-mid);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .outcome-box h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .outcome-box p { font-size: 13px; color: var(--muted); font-style: italic; }
+
+  /* ── Competitor table ────────────────── */
+  .table-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--cream-mid);
+    text-align: left;
+    padding: 11px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--cream); }
+  .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  td strong { font-family: 'Poppins', sans-serif; font-weight: 600; }
+  td em { color: var(--muted); font-size: 12px; }
+
+  /* ── Thesis cards ────────────────────── */
+  .thesis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .thesis-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .thesis-letter {
+    width: 32px; height: 32px;
+    background: var(--cream-mid);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .thesis-card h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .thesis-card p { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .thesis-assumption {
+    font-size: 11.5px;
+    color: var(--warn-text);
+    background: var(--warn-bg);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── Phase timeline ──────────────────── */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    margin-bottom: 24px;
+  }
+  .phase { padding: 24px; }
+  .phase:not(:last-child) { border-right: 1px solid var(--border); }
+  .phase-days {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .phase h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .phase ul { list-style: none; }
+  .phase ul li {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 4px 0 4px 16px;
+    position: relative;
+    font-style: italic;
+  }
+  .phase ul li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-style: normal;
+    font-size: 11px;
+  }
+
+  /* ── Risk pills ──────────────────────── */
+  .pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .pill-high { background: #fde8e8; color: #8b1a1a; }
+  .pill-med  { background: var(--warn-bg); color: var(--warn-text); }
+  .pill-low  { background: var(--ok-bg); color: var(--ok-text); }
+
+  /* ── KPI table ───────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .kpi-metric {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .kpi-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 6px;
+    font-size: 12px;
+  }
+  .kpi-phase {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--subtle);
+  }
+  .kpi-target {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--orange-dk);
+  }
+  .kpi-baseline {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  /* ── Footer ──────────────────────────── */
+  footer {
+    background: var(--cream-mid);
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  footer a { color: var(--orange); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-logo {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .footer-logo svg { width: 18px; height: 18px; fill: white; }
+
+  @media (max-width: 680px) {
+    .phases { grid-template-columns: 1fr; }
+    .phase:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
+    .nav-pill { display: none; }
+    .page-header { padding: 40px 24px 32px; }
+    .section { padding: 40px 24px; }
+    .section-divider { margin: 0 24px; }
+    nav { padding: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+  </div>
+  <span class="nav-title">Anthropic</span>
+  <span class="nav-sep">·</span>
+  <span class="nav-sub">PM, API Growth — Interview Brief</span>
+  <span class="nav-pill">May 2026</span>
+</nav>
+
+<!-- Page header -->
+<div class="page-header">
+  <div class="eyebrow">Interview Preparation · Focused Brief</div>
+  <h1>Claude Platform API:<br><em>Strategy &amp; Plan</em></h1>
+  <p>Problem framing · positioning · channels · OST · competitive landscape · 30-60-90 day plan · KPIs.</p>
+</div>
+
+<!-- Section 2: Problem Framing -->
+<div class="section">
+  <div class="section-label">Section 2 — MITRE Problem Framing Canvas v3</div>
+  <h2>Problem Framing</h2>
+  <p class="section-sub">Look Inward → Look Outward → Reframe. Bias-resistant problem statement before any solutions.</p>
+
+  <div class="cards-grid">
+    <div class="card warn">
+      <div class="card-label">Core Assumption to Challenge</div>
+      <div class="card-val">Bottleneck is acquisition</div>
+      <div class="card-desc">May actually be activation — developers who sign up but never make a second API call.</div>
+    </div>
+    <div class="card warn">
+      <div class="card-label">Who's Been Left Out</div>
+      <div class="card-val">Evaluators, not builders</div>
+      <div class="card-desc">Console optimized for developers who've decided to build — not those still comparing Claude vs. GPT.</div>
+    </div>
+    <div class="card warn">
+      <div class="card-label">Hidden Competitor</div>
+      <div class="card-val">Meta Llama ($0)</div>
+      <div class="card-desc">Cost-sensitive devs compare Claude to free self-hosted Llama, not $X/M OpenAI tokens.</div>
+    </div>
+    <div class="card ok">
+      <div class="card-label">Analogs That Solved This</div>
+      <div class="card-val">Stripe · Twilio · Vercel</div>
+      <div class="card-desc">All won on activation speed, not marketing spend. "7 lines of code" beats any ad campaign.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">How Might We Statement</div>
+    <div class="callout-text">
+      <strong>How might we</strong> help any developer — regardless of technical level, geography, or prior AI experience — reach their first working Claude integration <strong>in under 3 minutes</strong>, so they can experience the quality and safety difference before choosing a competitor?
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 3: Positioning -->
+<div class="section">
+  <div class="section-label">Section 3 — Geoffrey Moore, Crossing the Chasm</div>
+  <h2>Positioning Statement</h2>
+  <p class="section-sub">Not a tagline — a strategic clarity tool that forces hard choices on target, need, and differentiation.</p>
+  <div class="pos-block">
+    <div><span class="kw">For</span> independent developers, startup engineering teams, and regulated-industry architects</div>
+    <div><span class="kw">that need</span> to build AI-powered applications that users and enterprises can trust — without treating safety as a separate compliance layer,</div>
+    <div style="margin-top:10px;"><span class="kw">Claude Platform</span> is a frontier AI API</div>
+    <div><span class="kw">that</span> delivers state-of-the-art reasoning, 200K token context, and Constitutional AI safety properties your applications inherit by design — making regulated-industry deployment possible without additional compliance overhead.</div>
+    <div class="unlike">
+      <span class="kw">Unlike</span> OpenAI's API,<br>
+      <span class="kw">Claude Platform provides</span> verifiable safety-by-architecture — meaning applications inherit Constitutional AI properties that pass enterprise procurement reviews, financial services audits, and healthcare compliance checks without requiring custom safety guardrails.
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 5: Channels -->
+<div class="section">
+  <div class="section-label">Section 5 — Acquisition Channel Advisor</div>
+  <h2>Acquisition Channels &amp; RICE Scores</h2>
+  <p class="section-sub">CAC · LTV · Payback across all known API acquisition channels. Estimates directional — baseline in Days 1–30.</p>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <img src="chart3_rice_scores.png" alt="RICE Scores">
+      <div class="chart-caption">
+        <strong>Channel &amp; Experiment RICE Scores</strong>
+        <span>Docs runnable samples (52,500) leads all channels. Claude Code → API on-ramp is highest quality but needs Week 1 assumption validation before build.</span>
+      </div>
+    </div>
+    <div class="chart-card">
+      <img src="chart2_developer_scale.png" alt="Developer Scale">
+      <div class="chart-caption">
+        <strong>Developer Community Scale</strong>
+        <span>OpenAI's 4M developer head start compounds via network effects. Anthropic's advantage is intensity per developer (20h/week), not breadth.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 6: OST -->
+<div class="section">
+  <div class="section-label">Section 6 — Teresa Torres, Continuous Discovery Habits</div>
+  <h2>Opportunity Solution Tree</h2>
+  <p class="section-sub">Outcome → Opportunities → Solutions → Assumption Tests. The tree ends at tests, not solutions.</p>
+
+  <div class="outcome-box">
+    <div class="outcome-icon">◎</div>
+    <div>
+      <h3>Desired Outcome: Increase API Platform Activation Rate</h3>
+      <p>% of new signups making their first successful API call within 24 hours. Top-quartile PLG benchmark: &gt;50% within 24h. 10pp improvement at 10K signups/month = 1,000 additional activated developers on a compounding usage curve.</p>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:24px;">
+    <img src="chart4_ost_scores.png" alt="OST POC Scores">
+    <div class="chart-caption">
+      <strong>Recommended POC Scoring (Feasibility · Impact · Market Fit)</strong>
+      <span>B1 contextual upgrade modal scores highest (14/15). A1 in-console quickstart 13/15. C1 requires assumption validation: what % of Claude Code users are already API users?</span>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card info">
+      <div class="card-label">Opportunity A · POC: A1</div>
+      <div class="card-val">In-console Interactive Quickstart</div>
+      <div class="card-desc">Score 13/15. "Run this code" button with pre-loaded working API call. 2 weeks → dogfood → A/B at 20% signups.</div>
+    </div>
+    <div class="card ok">
+      <div class="card-label">Opportunity B · POC: B1 — Top Score</div>
+      <div class="card-val">Contextual Upgrade Modal</div>
+      <div class="card-desc">Score 14/15. Upgrade CTA at rate/token limit hit. Hypothesis: +20% free→paid conversion vs. billing-page only.</div>
+    </div>
+    <div class="card warn">
+      <div class="card-label">Opportunity C · Validate First</div>
+      <div class="card-val">Claude Code → API Path</div>
+      <div class="card-desc">Instrument in Week 1. If &gt;80% already converted → redirect effort. If &lt;40% → build C1 authenticated on-ramp.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 7: Competitors -->
+<div class="section">
+  <div class="section-label">Section 7 — Competitive Analysis</div>
+  <h2>Competitive Landscape</h2>
+  <p class="section-sub">Top 5 competitors + Meta Llama open-source floor. May 2026 data.</p>
+
+  <div class="chart-card" style="margin-bottom:24px;">
+    <img src="chart5_competitor_matrix.png" alt="Competitor Matrix">
+    <div class="chart-caption">
+      <strong>Price vs. Safety Architecture Depth</strong>
+      <span>Anthropic holds the top-right corner alone. No other closed-model provider can replicate Constitutional AI quickly.</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Competitor</th>
+          <th>Scale</th>
+          <th>Primary Moat</th>
+          <th>Pricing</th>
+          <th>Gap Anthropic Can Exploit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dot" style="background:#10A37F"></span><strong>OpenAI</strong></td>
+          <td>~4M developers</td>
+          <td>First-mover, GPT brand</td>
+          <td>Premium</td>
+          <td><em>Safety is marketing-thin; regulated-industry liability</em></td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#4285F4"></span><strong>Google Gemini</strong></td>
+          <td>~2.4M (+118% YoY)</td>
+          <td>Ecosystem embed + price</td>
+          <td>$2/M — ~1/7.5× Claude Opus</td>
+          <td><em>Developer trust issues; data privacy concerns</em></td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#0078D4"></span><strong>Microsoft Azure</strong></td>
+          <td>70% Fortune 1000</td>
+          <td>Enterprise incumbency, GitHub Copilot (145M)</td>
+          <td>Enterprise EA</td>
+          <td><em>No proprietary frontier model; IT-buyer focused, not developer-first</em></td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#FF9900"></span><strong>AWS Bedrock</strong></td>
+          <td>100K+ orgs</td>
+          <td>Model-agnostic infra</td>
+          <td>Usage-based</td>
+          <td><em>Claude-specific use cases require direct API; no safety story</em></td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#8B5CF6"></span><strong>Cohere</strong></td>
+          <td>~17K enterprises</td>
+          <td>Sovereign / multilingual AI</td>
+          <td>Enterprise contract</td>
+          <td><em>Wins procurement, not developer love; model quality below frontier</em></td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:#1877F2"></span><strong>Meta Llama (floor)</strong></td>
+          <td>1.2B+ downloads</td>
+          <td>Free open weights</td>
+          <td>$0 self-hosted</td>
+          <td><em>Can't compete on price — must win on safety, SLA, compliance</em></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 8: Thesis + Plan -->
+<div class="section">
+  <div class="section-label">Section 8 — 30-60-90 Day Plan</div>
+  <h2>Platform Thesis Candidates</h2>
+  <p class="section-sub">Select one by Day 30. Experiments validate the thesis — they don't originate it.</p>
+  <div class="thesis-grid">
+    <div class="thesis-card">
+      <div class="thesis-letter">A</div>
+      <h3>MCP Ecosystem as Distribution Moat</h3>
+      <p>Anthropic invented MCP. Position platform.claude.com as the canonical place to discover, publish, and monetize MCP servers. Developers who publish extensions compound switching costs.</p>
+      <div class="thesis-assumption">Assumption: Developers are building MCP servers without a canonical marketplace. Validate via informal GitHub directories and community lists.</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-letter">B</div>
+      <h3>Enterprise Self-Serve Expansion ($10K → $1M ARR)</h3>
+      <p>$1M+ ARR accounts scaled 12 → 500+. Biggest unlock is expansion — removing the sales rep at the $50K–$200K tier via usage dashboards, SSO, RBAC, and audit logs.</p>
+      <div class="thesis-assumption">Assumption: Accounts stall due to missing tooling, not pricing. Validate: interview 10 accounts in this tier about their expansion blockers.</div>
+    </div>
+    <div class="thesis-card">
+      <div class="thesis-letter">C</div>
+      <h3>Safety as a Paid Growth Feature for Regulated Verticals</h3>
+      <p>Finance, healthcare, and government are underserved by OpenAI and Google. Constitutional AI is real differentiation — but platform tooling doesn't yet match the safety story.</p>
+      <div class="thesis-assumption">Assumption: Regulated-industry devs are blocked by missing platform controls, not procurement complexity. Validate: product gaps vs. process gaps.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 8b: Timeline -->
+<div class="section">
+  <div class="section-label">Section 8 — Landing Plan Execution</div>
+  <h2>30-60-90 Day Timeline</h2>
+  <p class="section-sub">Anthropic PM culture: Product Notes not PRDs · 45-min prototype cycles · dogfood-first · no 12-month roadmaps.</p>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-days">Days 1–30</div>
+      <h3>Listen &amp; Map</h3>
+      <ul>
+        <li>Shadow DevRel, Eng, Billing, DS — one day each</li>
+        <li>Build live funnel dashboard: TTFAC, D7, paid conversion</li>
+        <li>12 developer interviews across 4 segments</li>
+        <li>Session replay audit — 20 onboarding sessions</li>
+        <li>Do competitor onboarding yourself</li>
+        <li>Select platform thesis by Day 30</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-days">Days 31–60</div>
+      <h3>Experiment</h3>
+      <ul>
+        <li>E1: In-console quickstart A/B — RICE 52,500</li>
+        <li>E2: Contextual upgrade modal — RICE 14,625</li>
+        <li>E3: Claude Code → API path — RICE 15,000</li>
+        <li>Kill review at Week 3 — stop no-signal tests</li>
+        <li>First KPI review with Eng, DevRel, Finance</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-days">Days 61–90</div>
+      <h3>Execute &amp; Publish</h3>
+      <ul>
+        <li>Full rollout of winning experiments</li>
+        <li>Kill losers — document learnings</li>
+        <li>KPI dashboard: Day 0 vs Day 90 delta</li>
+        <li>Platform thesis presented to leadership</li>
+        <li>Q2 experiment roadmap drafted</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <img src="chart10_gantt.png" alt="Gantt Chart">
+    <div class="chart-caption">
+      <strong>Task Timeline</strong>
+      <span>Thesis selected in Week 4 based on research. Experiments validate it in Days 31–60. Kill review at Day 52 stops no-signal work early.</span>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Section 8 KPIs -->
+<div class="section">
+  <div class="section-label">Section 8 — KPIs &amp; Risk Register</div>
+  <h2>KPIs &amp; Risk</h2>
+  <p class="section-sub">D30 retention only measurable for cohorts from Days 1–60. E3 requires Week 1 instrumentation as prerequisite.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-metric">New API signups / week</div>
+      <div class="kpi-row"><span class="kpi-phase">Days 1–30</span><span class="kpi-baseline">Baseline W1</span></div>
+      <div class="kpi-row"><span class="kpi-phase">Days 31–60</span><span class="kpi-target">Baseline +20%</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-metric">Free → paid conversion rate</div>
+      <div class="kpi-row"><span class="kpi-phase">Days 1–30</span><span class="kpi-baseline">Baseline W1</span></div>
+      <div class="kpi-row"><span class="kpi-phase">Days 31–60</span><span class="kpi-target">+20%</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-metric">D7 retention</div>
+      <div class="kpi-row"><span class="kpi-phase">Days 1–30</span><span class="kpi-baseline">Measure</span></div>
+      <div class="kpi-row"><span class="kpi-phase">Days 31–60</span><span class="kpi-target">&gt;40% PLG P75</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-metric">TTFAC &lt;5 min rate</div>
+      <div class="kpi-row"><span class="kpi-phase">Days 1–30</span><span class="kpi-baseline">Measure</span></div>
+      <div class="kpi-row"><span class="kpi-phase">Days 31–60</span><span class="kpi-target">≥50% signups</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-metric">Claude Code → API conversion</div>
+      <div class="kpi-row"><span class="kpi-phase">Days 1–30</span><span class="kpi-baseline">Instrument W1</span></div>
+      <div class="kpi-row"><span class="kpi-phase">Days 31–60</span><span class="kpi-target">+30%</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-metric">$10K → $100K ARR expansion</div>
+      <div class="kpi-row"><span class="kpi-phase">Days 1–30</span><span class="kpi-baseline">Baseline W1</span></div>
+      <div class="kpi-row"><span class="kpi-phase">Days 31–60</span><span class="kpi-target">Track rate</span></div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:24px;">
+    <img src="chart8_kpi_framework.png" alt="KPI Framework">
+    <div class="chart-caption">
+      <strong>KPI Targets by Phase</strong>
+      <span>Free→paid conversion baseline must be set before any experiment claims improvement.</span>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:24px;">
+    <img src="chart7_risk_matrix.png" alt="Risk Matrix">
+    <div class="chart-caption">
+      <strong>Risk Matrix</strong>
+      <span>Top-right cluster (act now): Eng capacity + Meta Llama free tier + model releases invalidating mid-experiment assumptions.</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Model releases invalidate mid-experiment assumptions</td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><em>Design experiments model-agnostically</em></td>
+        </tr>
+        <tr>
+          <td>Eng capacity consumed by model infrastructure</td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Ship UI-only wins first to build PM credibility before requesting eng allocation</em></td>
+        </tr>
+        <tr>
+          <td>Meta Llama 5 (free, frontier-class) pulls cost-sensitive developers</td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Target regulated verticals where free open-source is not viable</em></td>
+        </tr>
+        <tr>
+          <td>Google's $2/M token pricing creates permanent price pressure</td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Compete on safety posture and MCP/Conway ecosystem — not price</em></td>
+        </tr>
+        <tr>
+          <td>Claude Code → API assumption invalid (&gt;80% already converted)</td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><em>Validate in Week 1 before building; redirect to expansion if true</em></td>
+        </tr>
+        <tr>
+          <td>Enterprise self-serve blocked by procurement, not product</td>
+          <td><span class="pill pill-med">Med</span></td>
+          <td><span class="pill pill-high">High</span></td>
+          <td><em>Interview Thesis B accounts in Week 2; shift thesis if procurement is the block</em></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+  </div>
+  <p>Anthropic — PM, API Growth · Interview Brief · May 2026</p>
+  <p><a href="index.html">Full brief</a> &nbsp;·&nbsp; <a href="https://github.com/rhythmfromwithin/antropic">github.com/rhythmfromwithin/antropic</a></p>
+</footer>
+
+</body>
+</html>
