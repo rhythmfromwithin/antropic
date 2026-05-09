@@ -88,8 +88,8 @@ save("chart1_arr_comparison.png")
 # ══════════════════════════════════════════════════════════════════════════════
 # Chart 2 — Developer Community Scale
 # ══════════════════════════════════════════════════════════════════════════════
-fig, ax = plt.subplots(figsize=(9, 5.2))
-fig.subplots_adjust(left=0.1, right=0.95, top=0.87, bottom=0.14)
+fig, ax = plt.subplots(figsize=(9, 5.8))
+fig.subplots_adjust(left=0.1, right=0.95, top=0.87, bottom=0.26)
 
 labels = ["OpenAI", "Google\nGemini", "AWS\nBedrock", "Cohere\n(enterprise)"]
 devs   = [4_000_000, 2_400_000, 100_000, 17_000]
@@ -109,6 +109,10 @@ for bar, val in zip(bars, devs):
     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 80_000,
             label, ha="center", va="bottom", fontsize=12, fontweight="bold", color=TEXT)
 
+fig.text(0.5, 0.05,
+         "Anthropic developer community not publicly disclosed.  "
+         "70× API volume YoY signals intensity per developer — not breadth.",
+         ha="center", fontsize=9, color=MUTED)
 save("chart2_developer_scale.png")
 
 # ══════════════════════════════════════════════════════════════════════════════
