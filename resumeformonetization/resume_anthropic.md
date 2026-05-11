@@ -1,5 +1,5 @@
 # TAO ZHANG
-taozhang.product@gmail.com | +1 (646) 515-7618 | LinkedIn
+taozhang.product@gmail.com | +1 (646) 515-7618 | [LinkedIn](https://www.linkedin.com/in/taozhangnyu/)
 
 ---
 
