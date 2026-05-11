@@ -6,36 +6,155 @@
   <title>Resume</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
+
+    /* Claude / Anthropic-adjacent warm coral + cream */
+    :root {
+      --claude-coral: #d97757;
+      --claude-coral-deep: #c45c3e;
+      --claude-coral-soft: rgba(217, 119, 87, 0.14);
+      --claude-cream: #faf6f1;
+      --claude-card: #ffffff;
+      --claude-ink: #1a1614;
+      --claude-muted: #5c534d;
+      --claude-line: rgba(217, 119, 87, 0.22);
+      --claude-glow: rgba(217, 119, 87, 0.08);
+    }
+
     body {
       margin: 0;
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 1rem;
       line-height: 1.65;
-      color: #1c1917;
-      background: #fafaf9;
+      color: var(--claude-ink);
+      background: var(--claude-cream);
+      background-image:
+        radial-gradient(1200px 500px at 12% -8%, var(--claude-glow), transparent 55%),
+        radial-gradient(900px 400px at 88% 0%, rgba(196, 92, 62, 0.06), transparent 50%);
+      min-height: 100vh;
     }
+
     .wrap {
       max-width: 52rem;
       margin: 0 auto;
       padding: 2.5rem 1.25rem 4rem;
     }
-    .md { background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; padding: 2rem 2.25rem; }
+
+    .md {
+      background: var(--claude-card);
+      border: 1px solid var(--claude-line);
+      border-radius: 16px;
+      padding: 2rem 2.25rem 2.5rem;
+      box-shadow:
+        0 1px 2px rgba(26, 22, 20, 0.04),
+        0 12px 40px -16px rgba(196, 92, 62, 0.12);
+    }
+
     .md :first-child { margin-top: 0; }
-    .md h1 { font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.75rem; }
-    .md h2 { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #78716c; margin: 2rem 0 0.75rem; padding-top: 0.5rem; border-top: 1px solid #e7e5e4; }
-    .md h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
-    .md h3 { font-size: 1.0625rem; font-weight: 600; margin: 1.25rem 0 0.25rem; }
-    .md p { margin: 0.5rem 0; color: #44403c; }
-    .md ul { margin: 0.5rem 0 0.75rem; padding-left: 1.25rem; color: #44403c; }
+
+    .md h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 0.5rem;
+      color: var(--claude-ink);
+    }
+
+    .md h1 + p {
+      font-size: 0.9rem;
+      color: var(--claude-muted);
+      margin-top: 0;
+    }
+
+    .md h2 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--claude-coral-deep);
+      margin: 2rem 0 0.75rem;
+      padding: 0.35rem 0 0.35rem 0.85rem;
+      border-left: 3px solid var(--claude-coral);
+      background: linear-gradient(90deg, var(--claude-coral-soft), transparent 85%);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .md h2:first-of-type {
+      margin-top: 0;
+    }
+
+    .md h3 {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.25rem;
+      color: var(--claude-ink);
+    }
+
+    .md p { margin: 0.5rem 0; color: var(--claude-muted); }
+
+    .md ul {
+      margin: 0.5rem 0 0.75rem;
+      padding-left: 1.25rem;
+      color: var(--claude-muted);
+    }
+
     .md li { margin: 0.35rem 0; }
-    .md hr { border: 0; border-top: 1px solid #e7e5e4; margin: 1.5rem 0; }
-    .md a { color: #b45309; }
-    .md strong { color: #1c1917; font-weight: 600; }
-    .md em { font-style: italic; }
+
+    .md hr {
+      border: 0;
+      border-top: 1px solid var(--claude-line);
+      margin: 1.5rem 0;
+    }
+
+    .md a {
+      color: var(--claude-coral-deep);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(196, 92, 62, 0.35);
+    }
+
+    .md a:hover {
+      color: var(--claude-coral);
+      border-bottom-color: var(--claude-coral);
+    }
+
+    .md strong { color: var(--claude-ink); font-weight: 600; }
+    .md em { font-style: italic; color: #4a433e; }
+
+    /* Skills → pills (injected after parse; pattern from resume/index.html .tags/.tag) */
+    .skills-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.55rem;
+      margin: 0.5rem 0 0;
+      padding: 1.15rem 1.2rem 1.2rem;
+      background: linear-gradient(145deg, #fffaf6 0%, #fff5ee 48%, #fef8f4 100%);
+      border: 1px solid var(--claude-line);
+      border-radius: 14px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    }
+
+    .skill-pill {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #3d2e28;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(217, 119, 87, 0.32);
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      line-height: 1.35;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .skill-pill:hover {
+      border-color: var(--claude-coral);
+      box-shadow: 0 2px 8px rgba(196, 92, 62, 0.12);
+    }
+
     .err { color: #b91c1c; padding: 1rem; }
   </style>
 </head>
@@ -45,6 +164,30 @@
   </div>
   <script>
     (function () {
+      function splitSkillsIntoPills(container) {
+        var headings = container.querySelectorAll('h2');
+        for (var i = 0; i < headings.length; i++) {
+          if (!/^\s*skills\s*$/i.test(headings[i].textContent)) continue;
+          var next = headings[i].nextElementSibling;
+          if (!next || next.tagName !== 'P') return;
+          var raw = next.textContent.trim();
+          if (!raw) return;
+          var parts = raw.split(/\s*·\s*/).map(function (s) { return s.trim(); }).filter(Boolean);
+          if (parts.length < 2) return;
+          var wrap = document.createElement('div');
+          wrap.className = 'skills-pills';
+          wrap.setAttribute('aria-label', 'Skills');
+          for (var j = 0; j < parts.length; j++) {
+            var pill = document.createElement('span');
+            pill.className = 'skill-pill';
+            pill.textContent = parts[j];
+            wrap.appendChild(pill);
+          }
+          next.parentNode.replaceChild(wrap, next);
+          return;
+        }
+      }
+
       var root = document.getElementById('root');
       fetch('resume_anthropic.md', { cache: 'no-store' })
         .then(function (r) {
@@ -53,6 +196,7 @@
         })
         .then(function (text) {
           root.innerHTML = marked.parse(text);
+          splitSkillsIntoPills(root);
           var h1 = root.querySelector('h1');
           if (h1 && h1.textContent) document.title = h1.textContent.trim();
         })
