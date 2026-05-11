@@ -48,6 +48,11 @@ Ziff Davis (NASDAQ: ZD) is a vertically focused digital media and internet compa
 - Improved customer engagement by 86% MoM by incorporating 25+ user feedback items directly into the product, strengthening credibility and driving repeat purchase behavior.
 - Served as Lead SME for technical product training with customer support teams, ensuring consistent product and pricing communication at scale.
 
+### ExcitingPR — Senior Product Manager
+*2017 – 2019*
+
+- Developed and launched 15 digital marketing and mobile promotion products for Fortune 500 clients including ByteDance, Huawei, and Tencent, generating 3M new registered active users within 2 years.
+
 ### ByteDance — Product Manager
 *2015 – 2017*
 
@@ -59,11 +64,6 @@ Ziff Davis (NASDAQ: ZD) is a vertically focused digital media and internet compa
 
 - Grew paid subscribers 15% MoM and expanded total user base 33% to 1.07M in 8 months by launching 25+ features for the iOS and Android reading app.
 - Improved user experience scores by 25% in 4 months through structured user interviews and market research, translating findings directly into prioritized product improvements.
-
-### ExcitingPR — Senior Product Manager
-*2017 – 2019*
-
-- Developed and launched 15 digital marketing and mobile promotion products for Fortune 500 clients including ByteDance, Huawei, and Tencent, generating 3M new registered active users within 2 years.
 
 ---
 
